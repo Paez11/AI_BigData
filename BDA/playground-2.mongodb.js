@@ -10,53 +10,30 @@
 // https://www.mongodb.com/docs/mongodb-vscode/playgrounds/
 
 // Select the database to use.
-use('db_pract2');
+use('db_pract1');
 
-//Ejercicio 2: Sobre la base de datos "db_pract2" realizar las siguientes consultas sobre la colección "Organizaciones":
-//Obtén el número total de documentos que se han importado a la colección Organizaciones.
+//a. Obtén el número total de documentos que se han importado a la colección Restaurantes
+db.Hosteleria.count();
 
-db.Organizaciones.count();
+//b. Mostrar los datos de todos los restaurantes de cocina española (valor “Spanish”). 
+//¿Cuántos restaurantes de este tipo de cocina hay en la colección? 
+//¿Cuántos restaurantes sobre el total suponen los restaurantes de cocina española?
+db.Hosteleria.find({"cuisine" : "Spanish"});
+db.Hosteleria.find({"cuisine" : "Spanish"}).count();
+db.Hosteleria.find({ cuisine: 'Spanish' }).count() * 100 / db.Hosteleria.find({}).count()
+//c. Mostrar los nombres de todos los restaurantes de cocina portuguesa 
+//(valor “Portuguese”) que se encuentren en el barrio de “Queens”.
+db.Hosteleria.find({"cuisine" : "Portuguese", "borough" : "Queens"}, {name: 1, _id: 0})
 
-//Muestra los datos de todas las organizaciones que se encuentran en la provincia de Burgos. 
-//¿Cuántas organizaciones podemos encontrar ubicadas en la capital de la provincia?
+//d. Mostrar el nombre y la dirección de los restaurantes que tengan una valoración 
+//mayor de 90 puntos.
+db.Hosteleria.find({"grades.score" : {$gt:90}}, {_id: 0,name: 1,address: 1})
 
-db.Organizaciones.find({"fields.provincia" : "BURGOS"});
-db.Organizaciones.find({$and:[{"fields.provincia" : "BURGOS", "fields.localidad": "BURGOS"}]}).count();
+//e. ¿Cuántos restaurantes de cocina española tienen una puntuación menor a 50 puntos?
+db.Hosteleria.find({$and:[{"cuisine" : "Spanish","grades.score" : {$lt:50}}]}).count();
 
-//Busca todas las organizaciones que se encuentren en la ciudad de Ponferrada cuyo email de contacto pertenezca al dominio Gmail.
+//f. Mostrar el nombre y el tipo de cocina de los cinco restaurantes con mayor puntuación.
+db.Hosteleria.find({},{_id: 0, name: 1, cuisine: 1}).sort({"grades.score": -1}).limit(5)
 
-db.Organizaciones.find({$and:[{"fields.localidad" : "PONFERRADA", "fields.email": /gmail.com/}]});
-
-//Extrae todas las organizaciones que se encuentren en la provincia de Valladolid o Soria.
-
-db.Organizaciones.find({$or:[{"fields.localidad" : "VALLADOLID", "fields.localidad" : "SORIA"}]});
-
-//Ejercicio 3: Añade a la base de datos "db_pract2" una colección con nombre “Veterinarios” 
-//en la que importes el contenido del archivo dataset_veterinarios.json
-
-//Ejercicio 4. Sobre la colección “Veterinarios” realizar las siguientes consultas:
-
-//Obtén el número total de veterinarios no jubilados en Andalucía.
-
-db.Veterinarios.find({$and:[{"Nombre" : /Andalucía/, "MetaData.Nombre" : /no jubilados/}]}).count();
-
-//Extrae un listado de comunidades autónomas, ordenando los resultados de forma descendente y usando 
-//como campo de ordenación el número de colegiados no jubilados (campo Data).
-db.Veterinarios.aggregate([
-    {
-        $match: {
-            "MetaData.Variable.Nombre": "colegiados no jubilados",
-            "MetaData.Variable.Codigo": "colegiadosnojubilados"
-        }
-    },
-    {
-        $group: {_id: "$MetaData.Nombre", total: {$sum: "$Data.Valor"}}
-    },
-    {
-        $sort: {total: -1}
-    }
-]);
-
-//Muestra un listado de provincias con más de 50 profesionales en activo. Deberá aparecer ordenado de forma ascendente
-
-db.Veterinarios.find({"Data.Valor": {$gt: 50}}).sort({"Data.Valor": 1});
+//g. Mostrar el nombre y el tipo de cocina de los cinco restaurantes con menor puntuación
+db.Hosteleria.find({},{_id: 0, name: 1, cuisine: 1}).sort({"grades.score": 1}).limit(5)
