@@ -59,23 +59,114 @@ db.movies.find({"tomatoes.viewer.rating" : {$gte : 3, $lt : 4}}, {_id: 0, "title
 
 //Lista las películas sólo con título, idiomas, estreno, año, directores, escritores y países que se estrenaron antes del año 1900.
 
-
+db.movies.find({"year" : {$lt : 1900}}, {_id: 0, "title" : 1, "languages" : 1, "released" : 1, "year" : 1, "directors" : 1, "writers" : 1, "countries" : 1});
 
 //Muestra las películas sólo con título, idiomas, estreno, duración, directores, escritores, 
 //países que tengan una duración entre 60 y 90 minutos.
 
+db.movies.find({"runtime" : {$gte : 60, $lte : 90}}, {_id: 0, "title" : 1, "languages" : 1, "released" : 1, "runtime" : 1, "directors" : 1, "writers" : 1, "countries" : 1});
+
 //Muestra las películas sólo con título, idiomas, estreno, tiempo de ejecución, directores, escritores, 
 //países, imdb para las 5 películas con las calificaciones más altas de IMDb.
 
+db.movies.find({}, {_id: 0, "title" : 1, "languages" : 1, "released" : 1, "runtime" : 1, "directors" : 1, "writers" : 1}).limit(5).sort({"imdb.rating" : -1});
+
+db.movies.aggregate([
+    {
+        $limit: 5 
+    },
+    {
+        $project: {
+            _id : 0,
+            title : 1,
+            languages : 1,
+            released : 1,
+            runtime : 1,
+            directors : 1,
+            writers : 1,
+            countries : 1,
+            "imdb.rating" : 1
+        }
+    },
+    {
+        $sort: { "imdb.rating": -1 }
+    }
+]);
+
 //Lista las películas con el tiempo de ejecución promedio de las películas estrenadas en cada país.
+
+db.movies.aggregate([
+    {
+        $group: {
+            _id: "$countries",
+            avgRuntime: { $avg: "$runtime" }
+        }
+    }
+]);
 
 //Muestra el género más común entre las películas y cuenta cuantas veces aparece.
 
+db.movies.aggregate([
+    {
+        $unwind: "$genres" //Descompone el array de géneros en documentos separados
+    },
+    {
+        $group: {
+            _id: "$genres",
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $sort: { count: -1 }
+    },
+    {
+        $limit: 1
+    }
+]);
+
 //Encuentra los/as 10 directores/as con más películas
+
+db.movies.aggregate([
+    {
+        $unwind: "$directors"
+    },
+    {
+        $group: {
+            _id: "$directors",
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $sort: { count: -1 }
+    },
+    {
+        $limit: 10
+    }
+]);
 
 //Desarrolla una consulta para encontrar la calificación promedio de IMDb para películas con diferentes 
 //calificaciones (por ejemplo, 'PG', 'R', 'G')
 
+db.movies.aggregate([
+    {
+        $group: {
+            _id: "$rated",
+            avgRating: { $avg: "$imdb.rating" }
+        }
+    }
+]);
+
 //Desarrolla una consulta encontrar la película más antigua ganadora de un premio
 
+db.movies.find({"awards.wins" : {$gt: 0}}, {_id : 0, "title" : 1, "awards.wins" : 1, "year" : 1}).sort({"year" : 1}).limit(1);
+
 //Encuentra la película con la calificación de IMDb más alta y de ellas, la que tenga la calificación de espectadores más altas en Tomatoes
+
+db.movies.aggregate([
+    {
+        $limit: 1
+    },
+    {
+        $sort: { "imdb.rating": -1, "tomatoes.viewer.rating": -1 }
+    }
+]);
