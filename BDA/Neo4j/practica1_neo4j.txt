@@ -1,0 +1,256 @@
+Ejercicio 1
+
+CREATE
+(A:Conexion {name: 'A'}),
+(B:Conexion {name: 'B'}),
+(C:Conexion {name: 'C'}),
+(D:Conexion {name: 'D'}),
+(E:Conexion {name: 'E'}),
+(F:Conexion {name: 'F'}),
+(G:Conexion {name: 'G'}),
+(H:Conexion {name: 'H'}),
+
+(A)-[:COOC {ncon: 3}]->(B),
+(A)-[:COOC {ncon: 5}]->(C),
+(A)-[:COOC {ncon: 2}]->(D),
+(A)-[:COOC {ncon: 10}]->(H),
+(B)-[:COOC {ncon: 3}]->(A),
+(B)-[:COOC {ncon: 5}]->(C),
+(B)-[:COOC {ncon: 6}]->(H),
+(B)-[:COOC {ncon: 4}]->(E),
+(B)-[:COOC {ncon: 6}]->(G),
+(B)-[:COOC {ncon: 8}]->(D),
+(C)-[:COOC {ncon: 5}]->(A),
+(C)-[:COOC {ncon: 5}]->(B),
+(C)-[:COOC {ncon: 9}]->(G),
+(C)-[:COOC {ncon: 1}]->(E),
+(D)-[:COOC {ncon: 2}]->(A),
+(D)-[:COOC {ncon: 8}]->(B),
+(D)-[:COOC {ncon: 12}]->(E),
+(E)-[:COOC {ncon: 4}]->(B),
+(E)-[:COOC {ncon: 1}]->(C),
+(E)-[:COOC {ncon: 12}]->(D),
+(E)-[:COOC {ncon: 15}]->(G),
+(F)-[:COOC {ncon: 7}]->(C),
+(F)-[:COOC {ncon: 9}]->(H),
+(G)-[:COOC {ncon: 6}]->(B),
+(G)-[:COOC {ncon: 9}]->(C),
+(G)-[:COOC {ncon: 4}]->(E),
+(G)-[:COOC {ncon: 6}]->(B),
+(G)-[:COOC {ncon: 3}]->(H),
+(H)-[:COOC {ncon: 10}]->(A),
+(H)-[:COOC {ncon: 14}]->(D),
+(H)-[:COOC {ncon: 6}]->(B),
+(H)-[:COOC {ncon: 9}]->(F),
+(H)-[:COOC {ncon: 3}]->(G)
+
+Recorrido en anchura
+
+MATCH (source:Conexion)-[r:COOC]->(target:Conexion)
+RETURN gds.graph.project(
+  'myGraph_BFS',
+  source,
+  target
+)
+MATCH (source:Conexion{name:'H'})
+CALL gds.bfs.stream('myGraph_BFS', {
+  sourceNode: source
+})
+YIELD path
+RETURN path
+
+Recorrido en profundidad
+
+// Creamos el grafo. 
+MATCH (source:Conexion)-[r:COOC]->(target:Conexion)
+RETURN gds.graph.project(
+  'myGraph_DFS',
+  source,
+  target
+)
+MATCH (source:Conexion{name:'H'})
+CALL gds.dfs.stream('myGraph_DFS', {
+  sourceNode: source
+})
+YIELD path
+RETURN path
+
+Camino minimo
+MATCH (src:Conexion)-[r:COOC]->(trg:Conexion)
+RETURN gds.graph.project(
+  'cypherGraph',
+  src,
+  trg,
+  {
+    relationshipType: type(r),
+    relationshipProperties: r { .ncon }
+  },
+  { undirectedRelationshipTypes: ['COOC'] }
+)
+
+CALL gds.allShortestPaths.stream('cypherGraph', {
+  relationshipWeightProperty: 'ncon'
+})
+YIELD sourceNodeId, targetNodeId, distance
+WITH sourceNodeId, targetNodeId, distance
+WHERE gds.util.isFinite(distance) = true
+WITH gds.util.asNode(sourceNodeId) AS source, gds.util.asNode(targetNodeId) AS target, distance WHERE source <> target AND source.name = 'H'
+
+RETURN source.name AS source, target.name AS target, distance
+ORDER BY distance DESC, source ASC, target ASC
+LIMIT 10
+
+Camino minimo Dijkstra
+
+// Creamos la Proyección del grafo 
+MATCH (source:Conexion)-[r:COOC]->(target:Conexion)
+RETURN gds.graph.project(
+  'myGraph_Dijkstra',
+  source,
+  target,
+  { relationshipProperties: r { .ncon } }
+)
+
+MATCH (source:Conexion {name: 'D'}), (target:Conexion {name: 'F'})
+CALL gds.allShortestPaths.dijkstra.stream('myGraph_Dijkstra', {
+    sourceNode: source,
+    relationshipWeightProperty: 'ncon'
+})
+YIELD index, sourceNode, targetNode, totalCost, nodeIds, costs, path
+RETURN
+    index,
+    gds.util.asNode(sourceNode).ciudad AS sourceNodeName,
+    gds.util.asNode(targetNode).ciudad AS targetNodeName,
+    totalCost,
+    [nodeId IN nodeIds | gds.util.asNode(nodeId).name] AS nodeNames,
+    costs,
+    nodes(path) as path
+ORDER BY index
+
+Camino minimo algoritmo de Yen
+
+MATCH (source:Conexion)-[r:COOC]->(target:Conexion)
+RETURN gds.graph.project(
+  'myGraph_Yen',
+  source,
+  target,
+  { relationshipProperties: r { .ncon } }
+)
+
+MATCH (source:Conexion {name: 'D'}), (target:Conexion {name: 'F'})
+CALL gds.shortestPath.yens.write.estimate('myGraph_Yen', {
+    sourceNode: source,
+    targetNode: target,
+    k: 3,
+    relationshipWeightProperty: 'ncon',
+    writeRelationshipType: 'PATH'
+})
+YIELD nodeCount, relationshipCount, bytesMin, bytesMax, requiredMemory
+RETURN nodeCount, relationshipCount, bytesMin, bytesMax, requiredMemory
+
+Ejercicio 2
+
+CREATE
+(A:User {name: 'Luci_a'}),
+(B:User {name: 'Alicia_FG'}),
+(C:User {name: 'Toni_10'}),
+(D:User {name: 'Merche!333'}),
+(E:User {name: 'Marcos_91'}),
+
+(A)-[:Follows]->(B),
+(A)-[:Follows]->(C),
+(A)-[:Follows]->(D),
+(B)-[:Follows]->(A),
+(B)-[:Follows]->(E),
+(C)-[:Follows]->(A),
+(C)-[:Follows]->(E),
+(D)-[:Follows]->(A),
+(D)-[:Follows]->(E),
+(E)-[:Follows]->(B),
+(E)-[:Follows]->(D),
+(E)-[:Follows]->(C)
+
+medidas de centralidad de grado
+
+MATCH (source:User)-[r:Follows]->(target:User)
+RETURN gds.graph.project(
+  'myGraph_centralidad_grado',
+  target,
+  source
+)
+
+CALL gds.degree.stream('myGraph_centralidad_grado')
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score AS followers
+ORDER BY followers DESC, name DESC
+
+medidas de centralidad de cercanía
+
+MATCH (source:User)-[r:Follows]->(target:User)
+RETURN gds.graph.project(
+  'myGraph_cercania',
+  source,
+  target
+)
+
+CALL gds.closeness.stream('myGraph_cercania')
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score
+ORDER BY score DESC
+
+medidas de centralidad de intermediación
+
+MATCH (source:User)-[r:Follows]->(target:User)
+RETURN gds.graph.project(
+  'myGraph_intermediacion',
+  source,
+  target
+)
+
+CALL gds.betweenness.stream('myGraph_intermediacion')
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score
+ORDER BY score DESC
+
+
+Parte 2
+
+entre Alicia_FG y Merche!333
+
+Common Neighbors
+
+MATCH (x:User{name:'Alicia_FG'})
+MATCH (y:User{name:'Merche!333'})
+RETURN gds.alpha.linkprediction.commonNeighbors(x,y) AS score
+
+Preferential Attachment
+
+MATCH (x:User{name:'Alicia_FG'})
+MATCH (y:User{name:'Merche!333'})
+RETURN gds.alpha.linkprediction.preferentialAttachment(x, y) AS score
+
+Resource Allocation
+
+MATCH (x:User{name:'Alicia_FG'})
+MATCH (y:User{name:'Merche!333'})
+RETURN gds.alpha.linkprediction.resourceAllocation(x, y) AS score
+
+entre Toni_10 y Alicia_FG
+
+Common Neighbors
+
+MATCH (x:User{name:'Toni_10'})
+MATCH (y:User{name:'Alicia_FG'})
+RETURN gds.alpha.linkprediction.commonNeighbors(x,y) AS score
+
+Preferential Attachment
+
+MATCH (x:User{name:'Toni_10'})
+MATCH (y:User{name:'Alicia_FG'})
+RETURN gds.alpha.linkprediction.preferentialAttachment(x, y) AS score
+
+Resource Allocation
+
+MATCH (x:User{name:'Toni_10'})
+MATCH (y:User{name:'Alicia_FG'})
+RETURN gds.alpha.linkprediction.resourceAllocation(x, y) AS score
