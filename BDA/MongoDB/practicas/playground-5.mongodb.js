@@ -2,25 +2,46 @@ use('db_pract4')
 
 //En todas las operaciones hay que trabajar con los array y/o objetos que tengan los documentos.
 //Realiza operaciones READ. Estás se pueden combinar (puede haber alguna sentencia que contenga varias operaciones al mismo tiempo, por ejemplo, lógica, comparación y de elemento):
-//Al menos 2 con operaciones de comparación.
+/**
+ * Tenemos el siguiente dataset con información de países, estados y ciudades.
+ */
+//https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cities-dataset/data
 
-//Encontrar todos los países los cuales su zona horaria contenga una zona en la que su diferencia horaria con UTC sea más de 36000 segundos.
-//Indicar solo el nombre, la capital, la región y la zona horaria solo de los que lo cumplan.
+/**
+ * Imaginemos que tenemos una empresa de transporte aéreo que está organizando vuelos intercontinentales
+ * Según esto debemos saber las siguientes cosas para operar de manera eficaz:
+ */
+//Al menos 2 con operaciones de comparación.
+/**
+ * Necesitamos programar las salidas y llegadas para los vuelos de larga distancia como estos suelen cruzar varias zonas horarias, 
+ * es crucial conocer los países cuya zona horaria tiene un desfase horario elevado (más de 10 horas) respecto al GMT, para ajustar 
+ * horarios y conexiones en estas ubicaciones.
+ */
 db.countries.find({"timezones.gmtOffset" : {$gt : 36000}}, {_id: 0, "name" : 1, "capital" : 1, "region" : 1, "timezones" : {$elemMatch: {gmtOffset : {$gt: 36000}}}});
-//Encontrar los 5 primeros países que tengan su zona horaria en la que su diferencia horaria con UTC sea más de -10000 segundos y menos de 0 incluidos.
-//Indicar solo el nombre, la capital, la región y la zona horaria.
-db.countries.find({$and:[{"timezones.gmtOffset" : {$gt : -10000}},{"timezones.gmtOffset" : {$lt : 1}}]}, {_id: 0, "name" : 1, "capital" : 1, "region" : 1, "timezones" : { $elemMatch: {gmtOffset : { $gt : -10000}, gmtOffset : {$lt : 1}}}}).limit(5);
+/**
+ * La empresa tiene que planificar vuelos desde europa central (CET) a groenlandia (GMT-3) y necesita saber los países que se encuentran
+ * en la misma franja horaria que greenlandia. Para planificar las conexiones y horarios de los vuelos.
+ */
+db.countries.find({$and:[{"timezones.gmtOffset" : {$gte : -7200}},{"timezones.gmtOffset" : {$lte : 1}}]}, {_id: 0, "name" : 1, "capital" : 1, "region" : 1, "timezones" : { $elemMatch: {gmtOffset : { $gt : -10000}, gmtOffset : {$lt : 1}}}});
 
 //Al menos 2 con operaciones lógicas.
 
-//Encontrar todos los países que tengan más de 5 estados y menos de 10. Dar solo el nombre, la capital, la región y los estados.
+/**
+ * La empresa necesita saber los paises que tienen entre 5 y 10 estados, para planificar las rutas y conexiones de los vuelos. 
+ */
 db.countries.find({$and:[{"states.5": { $exists: true }},{"states.9": { $exists: false }}]}, {_id: 0, "name" : 1, "capital" : 1, "region" : 1, "states" : 1});
-//Encontrar todos los países que tengan español o ingles de traducción. Dar solo el nombre, la capital, la región, la moneda y el prefijo telefónico.
+
+/**
+ * Nuestra empresa está desarrollando una nueva plataforma de reservas para expandirse en mercados estaunidenses y latinoamericanos. 
+ * Para personalizar la experiencia de los usuarios, es fundamental identificar aquellos países que cuentan con traducciones de nombres 
+ * en inglés(nl) o español (es). Deberemos saber el codigo de telefono y la moneda para identificarlos en nuestra plataforma.
+ */
 db.countries.find({$or:[{"translations.nl" : { $exists: true }},{"translations.es" : { $exists: true }}]}, {_id: 0, "name" : 1, "capital" : 1, "region" : 1, "currency" : 1, "phone_code" : 1});
 
 //Al menos 2 con operaciones sobre elementos y/o evaluación.
-
-
+/**
+*
+ */
 
 //Al menos 3 con operaciones de agrupación (contar, ordenar,...).
 
