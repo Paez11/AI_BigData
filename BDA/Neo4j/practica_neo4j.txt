@@ -1,0 +1,97 @@
+CREATE
+(A:Conexion {name: 'A'}),
+(B:Conexion {name: 'B'}),
+(C:Conexion {name: 'C'}),
+(D:Conexion {name: 'D'}),
+(E:Conexion {name: 'E'}),
+(F:Conexion {name: 'F'}),
+(G:Conexion {name: 'G'}),
+(H:Conexion {name: 'H'}),
+
+(A)-[:COOC {ncon: 3}]->(B),
+(A)-[:COOC {ncon: 2}]->(D),
+(A)-[:COOC {ncon: 10}]->(H),
+(B)-[:COOC {ncon: 3}]->(A),
+(B)-[:COOC {ncon: 5}]->(C),
+(B)-[:COOC {ncon: 6}]->(H),
+(B)-[:COOC {ncon: 4}]->(E),
+(B)-[:COOC {ncon: 6}]->(G),
+(B)-[:COOC {ncon: 8}]->(D),
+(C)-[:COOC {ncon: 5}]->(B),
+(C)-[:COOC {ncon: 9}]->(G),
+(C)-[:COOC {ncon: 1}]->(E),
+(D)-[:COOC {ncon: 2}]->(A),
+(D)-[:COOC {ncon: 8}]->(B),
+(D)-[:COOC {ncon: 12}]->(E),
+(E)-[:COOC {ncon: 4}]->(B),
+(E)-[:COOC {ncon: 1}]->(C),
+(E)-[:COOC {ncon: 12}]->(D),
+(E)-[:COOC {ncon: 15}]->(G),
+(F)-[:COOC {ncon: 7}]->(C),
+(F)-[:COOC {ncon: 9}]->(H),
+(G)-[:COOC {ncon: 6}]->(B),
+(G)-[:COOC {ncon: 9}]->(C),
+(G)-[:COOC {ncon: 4}]->(E),
+(G)-[:COOC {ncon: 6}]->(B),
+(G)-[:COOC {ncon: 3}]->(H),
+(H)-[:COOC {ncon: 10}]->(A),
+(H)-[:COOC {ncon: 14}]->(D),
+(H)-[:COOC {ncon: 6}]->(B),
+(H)-[:COOC {ncon: 9}]->(F),
+(H)-[:COOC {ncon: 3}]->(G)
+
+Recorrido en anchura
+
+MATCH (source:Conexion)-[r:COOC]->(target:Conexion)
+RETURN gds.graph.project(
+  'myGraph_BFS',
+  source,
+  target
+)
+MATCH (source:Conexion{name:'H'})
+CALL gds.bfs.stream('myGraph_BFS', {
+  sourceNode: source
+})
+YIELD path
+RETURN path
+
+Recorrido en profundidad
+
+// Creamos el grafo. 
+MATCH (source:Conexion)-[r:COOC]->(target:Conexion)
+RETURN gds.graph.project(
+  'myGraph_DFS',
+  source,
+  target
+)
+MATCH (source:Conexion{name:'H'})
+CALL gds.dfs.stream('myGraph_DFS', {
+  sourceNode: source
+})
+YIELD path
+RETURN path
+
+Camino minimo
+MATCH (src:Conexion)-[r:COOC]->(trg:Conexion)
+RETURN gds.graph.project(
+  'cypherGraph',
+  src,
+  trg,
+  {
+    relationshipType: type(r),
+    relationshipProperties: r { .cost }
+  },
+  { undirectedRelationshipTypes: ['COOC'] }
+)
+
+CALL gds.allShortestPaths.stream('cypherGraph', {
+  relationshipWeightProperty: 'cost'
+})
+YIELD sourceNodeId, targetNodeId, distance
+WITH sourceNodeId, targetNodeId, distance
+WHERE gds.util.isFinite(distance) = true
+WITH gds.util.asNode(sourceNodeId) AS source, gds.util.asNode(targetNodeId) AS target, distance WHERE source <> target
+
+RETURN source.name AS source, target.name AS target, distance
+ORDER BY distance DESC, source ASC, target ASC
+LIMIT 10
