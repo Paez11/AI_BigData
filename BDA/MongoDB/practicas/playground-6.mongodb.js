@@ -471,8 +471,8 @@ db.data.deleteMany({
 db.data.find({ "callLetters": "TFRB", "airTemperature.quality": "9" }, { _id: 0, "callLetters": 1, "airTemperature.quality": 1 });
 //Al menos 5 consultas AGGREGATE con al menos 3 condiciones diferentes. 
 /**
- * La aerolínea quiere evitar áreas con viento fuerte y baja visibilidad. Esta consulta identifica las estaciones que 
- * cumplen con estos criterios y calcula la temperatura promedio para cada estación.
+   Debido a los últimos accidentes aereos en ciertas zonas donde el viento era fuerte y la visibilidad baja, se quiere saber
+   la temperatura que hay en esas areas. Para identificar si la causa del accidente fueron convenciones de aire.
  */
 
 db.data.aggregate([
@@ -486,110 +486,113 @@ db.data.aggregate([
     $group: {
       _id: "$st", 
       averageTemperature: { $avg: "$airTemperature.value" }, 
-      totalWindSpeed: { $sum: "$wind.speed.rate" }  
-    }
-  },
-  {
-    $project: {
-      _id: 1,
-      averageTemperature: 1,
-      totalWindSpeed: 1
-    }
-  }
-])
-
-/**
- * En este caso, la aerolínea quiere analizar las estaciones situadas a gran altura y con temperaturas extremadamente altas.
- */
-
-db.data.aggregate([
-  {
-    $match: {
-      "airTemperature.value": { $gt: 35 },
-      "elevation": { $gt: 3000 }  
-    }
-  },
-  {
-    $group: {
-      _id: null,
-      totalStations: { $count: {} },
-      averagePressure: { $avg: "$pressure.value" } 
-    }
-  },
-  {
-    $project: {
-      totalStations: 1,
-      averagePressure: 1
-    }
-  }
-])
-
-/**
- * La aerolínea desea encontrar estaciones con condiciones ideales para la planificación de vuelos: temperaturas moderadas, 
- * viento bajo y visibilidad clara.
- */
-
-db.data.aggregate([
-  {
-    $match: {
-      "airTemperature.value": { $gte: 10, $lte: 25 },
-      "wind.speed.rate": { $lt: 30 },
-      "visibility.distance.value": { $gt: 10000 } 
-    }
-  },
-  {
-    $group: {
-      _id: "$st",
-      averageTemperature: { $avg: "$airTemperature.value" },
-      totalWindSpeed: { $sum: "$wind.speed.rate" },
+      totalWindSpeed: { $avg: "$wind.speed.rate" },
       visibility: { $avg: "$visibility.distance.value" }
     }
   },
   {
     $project: {
-      _id: 1,
+      _id: 0,
       averageTemperature: 1,
       totalWindSpeed: 1,
       visibility: 1
     }
   }
 ])
-
 /**
- * identificar areas con temperaturas extremadamente altas o bajas, visibilidad limitada (menos de 2 km) 
- * y una presión fuera del rango normal (por ejemplo, mayor a 1025 hPa o menor a 980 hPa). Luego, calcula promedios de presión, 
- * altitud y distancia a la estación.
+   La empresa quiere saber cuantas estaciones situadas a gran altura son afectadas por temperaturas extremadamente altas y la presión de estas.
+   De esta manera podremos obtener el número de areas que son afectadas en verano por la temperatura y si hay peligro de vuelo cerca de estas.
  */
 
 db.data.aggregate([
-  {
-    $match: {
-      $or: [
-        { "airTemperature.value": { $gt: 40 } },
-        { "airTemperature.value": { $lt: -20 } } 
-      ],
-      "visibility.distance.value": { $lt: 2000 }, 
-      $or: [
-        { "pressure.value": { $gt: 1025 } },
-        { "pressure.value": { $lt: 980 } }
-      ]
-    }
-  },
-  {
-    $group: {
-      _id: null,
-      averagePressure: { $avg: "$pressure.value" }, 
-      averageAltitude: { $avg: "$elevation" }, 
-      averageDistance: { $avg: "$visibility.distance.value" }, 
-      totalStations: { $count: {} } 
-    }
-  },
-  {
-    $project: {
-      averagePressure: 1,
-      averageAltitude: 1,
-      averageDistance: 1,
-      totalStations: 1
-    }
+{
+  $match: {
+    "airTemperature.value": { $gt: 35 },
+    "elevation": { $gt: 3000 }  
   }
+},
+{
+  $group: {
+    _id: null,
+    totalStations: { $count: {} },
+    averagePressure: { $avg: "$pressure.value" } 
+  }
+},
+{
+  $project: {
+    _id: 0,
+    totalStations: 1,
+    averagePressure: 1
+  }
+}
+])
+
+/**
+   La aerolínea desea encontrar estaciones con condiciones ideales para la planificación de vuelos: temperaturas moderadas, 
+   viento bajo y visibilidad clara.
+ */
+
+db.data.aggregate([
+{
+  $match: {
+    "airTemperature.value": { $gte: 10, $lte: 25 },
+    "wind.speed.rate": { $lt: 30 },
+    "visibility.distance.value": { $gt: 10000 } 
+  }
+},
+{
+  $group: {
+    _id: "$st",
+    averageTemperature: { $avg: "$airTemperature.value" },
+    totalWindSpeed: { $sum: "$wind.speed.rate" },
+    visibility: { $avg: "$visibility.distance.value" }
+  }
+},
+{
+  $project: {
+    _id: 0,
+    averageTemperature: 1,
+    totalWindSpeed: 1,
+    visibility: 1
+  }
+}
+])
+
+/**
+   Queremos identificar de media las condiciones que pueden afectar al vuelo en temperaturas extremas
+   para saber la distribución que siguen y hacer un analisis más profundo en el futuro.
+   Nos fijaremos sobre todo en la presión, la altura y la distancia de visibilidad.
+ */
+db.data.aggregate([
+{
+  $match: {
+    $or: [
+      { "airTemperature.value": { $gt: 40 } },
+      { "airTemperature.value": { $lt: -20 } } 
+    ],
+    "visibility.distance.value": { $lt: 2000 }, 
+    $or: [
+      { "pressure.value": { $gt: 1025 } },
+      { "pressure.value": { $lt: 980 } }
+    ]
+  }
+},
+{
+  $group: {
+    _id: null,
+    averagePressure: { $avg: "$pressure.value" }, 
+    averageAltitude: { $avg: "$elevation" }, 
+    averageDistance: { $avg: "$visibility.distance.value" }, 
+    totalStations: { $count: {} } 
+  }
+},
+{
+  $project: {
+    _id: 0,
+    averagePressure: 1,
+    averageAltitude: 1,
+    averageDistance: 1,
+    totalStations: 1
+  }
+}
 ])
