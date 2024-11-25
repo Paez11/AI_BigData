@@ -1,0 +1,255 @@
+1 Amazon
+
+El uso de Big Data en Amazon está basado en el machine learning, es decir, la capacidad de los sistemas de aprender a través del 
+análisis de datos masivos que se obtiene de la recogida, almacenamiento y ordenamiento que hace el Big Data.
+
+Amazon utiliza el big data y la business intelligence para conocer mejor a sus clientes potenciales y así poder ofrecerles mejores 
+productos y un proceso de compra adaptado a sus necesidades particulares. Además, la aplicación de estas tecnologías de análisis de 
+grandes volúmenes de información le ha permitido implementar una cultura de innovación y mejora continua en la compañía, lo que la ha 
+situado a la cabeza del mercado en este aspecto.
+
+Análisis predictivo de las compras
+
+El análisis predictivo de las compras emplea las técnicas de Big Data, como la creación de bases de datos para su posterior 
+análisis mediante aprendizaje automatizado, para crear el sistema de recomendaciones que sugiere a los clientes de Amazon productos 
+relacionados con sus gustos.
+Este sistema se basa en el análisis de los historiales de compra de los usuarios
+
+Experiencia única para cada usuario
+Amazon se esfuerza en ofrecer la mejor experiencia de usuario a todas las personas que utilizan su plataforma web, algo que consiguen 
+gracias a la business intelligence. La aplicación del aprendizaje automatizado (el big data training de Amazon), la empresa utiliza 
+complejos algoritmos de inteligencia artificial que aprenden gracias a los datos recopilados de los usuarios y les permiten ofrecer 
+una experiencia única para cada usuario (basada en sus gustos, hábitos y necesidades).
+personalización
+
+Potenciar los eventos especiales de venta
+Amazon es especialista en romper récords de ventas en fechas señaladas donde suele haber picos de venta, como pueden ser el Black Friday 
+o el Día de los enamorados, por ejemplo.
+
+Gran infraestructura
+No es un secreto que la propia Amazon es una de las empresas líderes de servicios cloud computing. Las herramientas de Amazon Web Service 
+son el complemento ideal para que la empresa pueda gestionar el big data de forma eficiente y obtener los mejores resultados.
+
+Las herramientas de la compañía que le han llevado al éxito, como el almacenamiento en la nube, la analítica inteligente de datos, 
+el aprendizaje automatizado y la analítica predictiva, también están a disposición de otras empresas que pueden contratarlas para mejorar 
+y potenciar su modelo de negocio y resultados.
+
+2 Netflix
+
+Algoritmos y Recomendaciones de Contenido
+Los algoritmos desempeñan un papel fundamental en las recomendaciones personalizadas que las plataformas como Netflix proporcionan a sus 
+usuarios. Estos algoritmos utilizan técnicas de aprendizaje automático y procesamiento de datos para analizar el comportamiento del usuario 
+y generar sugerencias de contenido relevantes.
+
+-Recopilación de datos: 
+-Procesamiento de datos:
+-Creación de perfiles de usuario:
+-Comparación con otros usuarios:
+-Generación de recomendaciones:
+-Aprendizaje continuo:
+-Optimización de la experiencia del usuario:
+
+selección de contenidos
+Gracias a los datos extraídos y analizados mediante algoritmos de machine learning, como hemos visto en el apartado anterior, 
+el Big Data ha tenido un papel fundamental en la selección de contenidos, permitiendo tomar decisiones informadas en cuanto a qué 
+contenido ofrecer y cómo hacerlo.
+
+-Conocimiento de la audiencia:
+-Recomendaciones personalizadas:
+-Producción de contenido original: 
+-Optimización de la biblioteca de contenido:
+-Segmentación de audiencia: 
+-Evaluación del rendimiento: 
+-Predicción de éxitos potenciales: 
+
+Análisis de Hábitos de Visualización
+Netflix realiza un análisis exhaustivo de los hábitos de visualización de sus usuarios para entender cómo interactúan con su 
+plataforma y el contenido. Esto implica la recopilación y el procesamiento de datos sobre lo que los usuarios ven, cuánto tiempo 
+lo ven, cuándo lo ven y cómo interactúan con el contenido.
+
+-Historiales de visualización: 
+-Tiempo de visualización:
+-Secuencias de visualización:
+-Interacciones de usuario:
+
+Interfaz de Usuario y Experiencia del Cliente
+Una interfaz intuitiva es clave para una experiencia de usuario positiva. Facilita la navegación y el acceso al contenido deseado, 
+mejorando la satisfacción general del usuario. Una interfaz bien diseñada es crucial para mantener a los usuarios comprometidos y reducir 
+la frustración durante la búsqueda de contenido.
+
+El uso de Big Data para mejorar la interfaz de usuario implica aprovechar datos masivos para diseñar una experiencia más personalizada 
+y eficiente para los usuarios.
+
+3 Apple
+
+Apple se encuentra en una posición única para recopilar una cantidad monumental de datos gracias a su ecosistema de productos y servicios. 
+Desde iPhones hasta iPads, pasando por Apple Mac y Apple TV, la empresa puede recoger información valiosa que posteriormente puede ser 
+analizada gracias a big data apple.
+
+Apple utiliza el Big Data para conocer la forma de abordar sus nuevos productos y servicios. Un ejemplo de ello son las aplicaciones. 
+Hoy, Apple las diseña en base a los datos que obtiene del uso de las mismas, en lugar de hacerlo pensando en cómo la marca querría que las 
+utilizarán los consumidores. Esto permite que se ajusten cada vez más a los gustos del cliente. Obtienen así una amplia mejora de la 
+experiencia del consumidor.
+
+One area in particular that has received a boost from big data analytics is application design. Applications are the useful tools many 
+people have on their smartphones and tablets, and those tools can collect data on exactly how people use them. This is an important 
+distinction to make, since in the past, designs were made intending to force people to use applications a certain way. Now, Apple can 
+discover how people are using apps in real life and alter future designs to fit with customer tendencies.
+
+4 Coca-Cola
+
+utiliza sus propias redes sociales para analizar cómo se aceptan en diferentes países sus productos y servicios. 
+Gracias a ellas obtiene datos como la percepción de los productos, las personas que los consumen (en rango de sexo, edad, ubicación…) 
+y su fidelidad con los productos. Además, también emplea el Big Data y el análisis predictivo de datos en sus máquinas expendedoras.
+
+Opciones saludables
+Cada vez son más las preocupaciones de los consumidores por reducir el consumo de azúcar y otro tipo de sustancias que contienen los 
+refrescos. Por eso, empresas como Coca-Cola han desarrollado diferentes variables de producto tanto bajo el mismo nombre de marca 
+(toda su gama «Zero») como con otras conocidas como Minute Maid que cada vez ocupan más cuota de mercado.
+
+Para asegurarse de la calidad y el sabor óptimo de sus refrescos, la empresa combina una serie de algoritmos que recogen a través 
+de sistemas de big data, datos meteorológicos recogidos por imágenes satélite, datos históricos que contienen tanto información 
+sobre cosechas como de precios para mantener un control eficaz que les asegure que sus productos no sólo cumplen con las condiciones 
+de crecimiento y maduración, sino que, además, conservan un buen sabor.
+
+5 Starbucks
+
+Con base al análisis que se realiza de la información se define el porcentaje de beneficio en cuanto a la rentabilidad y a la inversión 
+del punto. El Big Data Analytics (en este artículo hablamos de empresas que usan Big Data Analytics) es base fundamental de esta gran 
+compañía. Es lo que le permite conocer de manera profunda a sus clientes para generar descuentos y cupones promocionales personalizadas 
+para generar un lazo entre marca/cliente.
+
+Dirigirse con promociones, cupones y ofertas personalizadas a sus clientes es un ejemplo claro y clásico de como aplican el manejo de los 
+datos. Conocer las preferencias de sus usuarios de manera individual por pedido y por patrones de compras es lo que les permite accionar 
+y enviar ofertas personalizadas.
+El desarrollo de productos orientados a la comprensión es lo mismo a las promociones personalizadas pero aplicándolo a la gama de sus 
+productos. Este nace de los hábitos de las diferentes y repetidas compras delos clientes, donde se puede comparar y distinguir cuales 
+son los productos que compran en grandes cantidades.
+La implementación de señalización digital donde se reflejan sus productos y menús de una manera más dinámicas que son desarrolladas con 
+pantallas configuradas por computadora.
+
+Data analytic & Product and Sales decisions: 
+
+Furthermore, personalizing customer orders and enhancing their order experience, the data also helps the company improve and expand their 
+services and product markets. They utilize the power of data intelligence through Atlas, a mapping tool and business intelligence platform 
+developed by Esri.
+
+personalización
+
+predicción de demanda
+
+optimización de costos
+
+
+Big Data en empresas españolas
+
+cifras clave
+
+Crece en 3,6 puntos hasta alcanzar el 11,8% de las empresas de más de 10 empleados. Destacan las grandes empresas (más de 249 personas), 
+con un aumento de ocho puntos porcentuales en el año 2022. Entre las microempresas (menos de diez personas), el 4,6% usa esta tecnología, 
+más de un punto porcentual sobre el valor de 2021.
+El análisis de big data está presente en un 13,9% de las compañías, lo que supone casi tres puntos más que el año pasado. 
+El 3,7% de las microempresas también usa esta tecnología, medio punto más que en 2021.
+
+tendencias de uso por sector o tamaño empresarial
+
+son las del sector TIC (15,5%) y el de información y las comunicaciones (14,5%). Las personas especialistas en datos se encuentran en el 
+9,8% de las empresas, un aumento de siete décimas con respecto a 2021. Destacan las grandes empresas (41,7%), las medianas (20,1%) y 
+pequeñas (7%); mientras que solo el 0,5% de microempresas dispone de este perfil en su plantilla.
+
+Son también el sector TIC (41,9%) y el de información y comunicaciones (40,2%) donde hay un mayor porcentaje de empresas con especialistas 
+en datos.
+
+barreras principales para su adopción
+
+El
+modelo estructural fue valorado mediante PLS con un adecuado ajuste global. Entre los resultados
+destacamos que tiene más relevancia una buena infraestructura para poder usar Big Data que la
+dificultad de su implantación aceptando por necesario hacer un esfuerzo en su implementación.
+Aportamos beneficios académicos por lo innovador y para la gestión, el beneficio que reportará a
+las empresas españolas el desarrollo de esta tecnología para una mejor gestión de la relación con
+los clientes.
+
+
+¿Qué porcentaje de empresas en España utilizan Big Data, según los estudios más recientes?
+
+¿Cómo varía el uso de Big Data entre grandes empresas, PYMEs y microempresas?
+
+¿Qué sectores lideran la adopción de Big Data en España y cuáles son los motivos?
+
+¿Cuáles son las principales barreras para la implementación de Big Data en las empresas españolas?
+
+¿Qué fuentes de datos (geolocalización, redes sociales, etc.) son más comunes en estas implementaciones?
+
+¿Cómo podrían las PYMEs superar las barreras mencionadas?
+
+¿Qué oportunidades ofrece el Big Data para mejorar la competitividad empresarial?
+
+
+Caso de éxito Big Data en España
+
+CaixaBank
+El banco español ha sido uno de los pioneros en el uso del Big Data en el sector financiero. Utiliza esta tecnología para analizar 
+los datos de sus clientes y ofrecerles productos y servicios personalizados. Además, utiliza técnicas de análisis de riesgos para prevenir 
+fraudes y delitos financieros.
+
+“Incorporamos estos datos para crear nuevos productos para nuestros clientes potenciales y responder a sus necesidades, para identificar 
+objetivos y evaluarlos y también para incrementar los datos sobre nuestros modelos de riesgo y mejorar su rendimiento”, explica Nebot. 
+Y añade: “Podemos hacer la propuesta adecuada al cliente adecuado en el momento oportuno”.
+
+La seguridad, por su parte, es otro de los factores que se ha visto influenciado por la llegada del big data. Según Pere Nebot, gracias 
+al análisis de datos “somos capaces de detectar cualquier actividad sospechosa, conducta inusual o extraña”, por lo que “ahora protegemos 
+mejor a nuestros clientes”.
+
+El director corporativo de servicios informáticos (CIO) de CaixaBank, además, hace especial hincapié en que el futuro de la banca debe 
+pasar por un proceso de digitalización: “incorporar nuevas tecnologías a la oferta bancaria no es un deseo, es una obligación”.
+
+Servicios por y para el cliente
+Una gestión comercial más eficaz
+Apuesta de presente… y de futuro
+
+ ¿Cómo evalúas el impacto del caso analizado en términos de competitividad, innovación o sostenibilidad?
+
+
+ webgrafia
+
+Amazon 
+
+ -https://ayudaleyprotecciondatos.es/big-data/amazon/
+ -https://keyrus.com/sp/es/insights/como-amazon-llego-a-ser-amazon-gracias-al-big-data
+ -https://www.theinformationlab.es/blog/como-utiliza-amazon-el-big-data/
+
+ Netflix
+
+-https://www.datacentric.es/blog/insight/exito-netflix-datos/
+-https://www.pontia.tech/netflix-big-data-clave-para-su-exito/
+
+Apple
+
+-https://www.tecon.es/pierde-el-miedo-a-los-datos-y-descubre-ejemplos-de-empresas-que-utilizan-big-data-para-obtener-grandes-beneficios/#:~:text=Apple%20utiliza%20el%20Big%20Data,que%20las%20utilizar%C3%A1n%20los%20consumidores.
+-https://conectandoideas.net/big-data-apple/
+-https://www.virtual-strategy.com/2015/05/07/power-innovate-machine-learning?page=0,1#axzz3bYvhWS7M
+
+Coca-Cola
+
+-https://www.tecon.es/pierde-el-miedo-a-los-datos-y-descubre-ejemplos-de-empresas-que-utilizan-big-data-para-obtener-grandes-beneficios/#:~:text=Apple%20utiliza%20el%20Big%20Data,que%20las%20utilizar%C3%A1n%20los%20consumidores.
+-https://www.isdi.education/es/blog/el-uso-de-coca-cola-de-la-tecnologia
+-https://www.managementsociety.net/2017/09/21/como-utiliza-coca-cola-los-millones-de-datos-que-obtiene/
+
+Starbucks
+
+-https://marketinginsiderreview.com/analisis-de-datos-de-starbucks/
+-https://d3.harvard.edu/platform-digit/submission/starbucks-leveraging-big-data-and-artificial-intelligence-to-improve-experience-and-performance/
+
+
+Big data en empresas españolas
+
+-https://www.ontsi.es/es/publicaciones/uso-de-inteligencia-artificial-y-big-data-en-las-empresas-espanolas
+-https://portal.mineco.gob.es/es-es/comunicacion/Paginas/Informe_ONTSI.aspx#:~:text=La%20comparativa%20respecto%20a%20Europa,%25)%20o%20Dinamarca%20(27%25).
+-https://idus.us.es/items/4aa56627-91d0-476b-8039-290d0d71d552
+
+Caso de éxito Big Data en España
+
+-https://www.inesdi.com/blog/3-empresas-que-triunfaron-en-2020-con-Big-Data/
+-https://blog.caixabank.es/blogcaixabank/el-big-data-y-su-influencia-en-el-sector-bancario/
+-https://blog.caixabank.es/blogcaixabank/viaje-al-corazon-del-big-data-bancario/
