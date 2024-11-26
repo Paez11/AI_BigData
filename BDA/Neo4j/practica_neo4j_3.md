@@ -495,7 +495,8 @@ Llamada
    ```
    - Algoritmo de Yen
 
-
+    Si queremos considerar los caminos más cortos porque queremos realizar un viaje de sevilla a grecia 
+    de minimo coste que podemos coger para realizar dicho viaje.
    
    Proyección
    ```
@@ -510,7 +511,7 @@ Llamada
 
    Llamada
    ```
-        MATCH (source:Airport {iata: 'BCN'}), (target:Airport {iata: 'SVO'})
+        MATCH (source:Airport {iata: 'SVO'}), (target:Airport {iata: 'LGAL'})
         CALL gds.shortestPath.yens.stream('Graph_Yens', {
             sourceNode: source,
             targetNode: target,
@@ -530,6 +531,8 @@ Llamada
    ```
 
    - Árbol de expansión de peso mínimo (Minimum Weight Spanning Tree)
+
+    Si queremos ver rutas aéreas las cuales tienen el menor costo operativo para un avión por si necesitamos transportar algo o una aerolinea necesita ahorrar combustible.
 
     Proyección
     ```
@@ -566,6 +569,8 @@ Llamada
     ```
    - BFS de un nodo
 
+    Digamos que un pasajero necesita llegar desde un determinado Aeropuerto  a otro Aeropuerto. Se querra buscar las rutas con el menor número de escalas posibles.
+
     Proyección
     ```
         MATCH (source:Airport)-[r:HAS_ROUTE]->(target:Airport)
@@ -586,6 +591,8 @@ Llamada
         RETURN path
     ```
    - DFS de un nodo
+
+   Por ejemplo un sistema de transporte aéreo necesita listar todas las rutas posibles entre el aeropuerto de málaga y otro aeropuerto para analizar alternativas en caso de congestión o restricciones en las rutas principales.
 
     Proyección
     ```
@@ -635,14 +642,17 @@ Llamada
 
    - Intermediación
 
+   Por ejemplo si queremos saber el grado de influencia que tiene un aeropuerto sobre otro según su distancia podemos hacer lo siguiente.
+   Con esto podemos sabemos que aeropuertos son más importantes a la hora de tomar un vuelo con respecto a otros.
+
        Proyección
     ```
-        MATCH (source:Airport)-[r:IN_CITY]->(target:City)
+        MATCH (source:Airport)-[r:HAS_ROUTE]->(target:Airport)
         RETURN gds.graph.project(
         'Graph_Betweenness',
-            source,
-            target,
-        { relationshipProperties: r { .distance } }
+                source,
+                target,
+            { relationshipProperties: r { .distance } }
         )
     ```
 
@@ -650,20 +660,23 @@ Llamada
     ```
         CALL gds.betweenness.stream('Graph_Betweenness')
         YIELD nodeId, score
-        RETURN gds.util.asNode(nodeId).name AS city, score AS betweenness
-        ORDER BY city ASC
+        RETURN gds.util.asNode(nodeId).iata AS airport, score AS betweenness
+        ORDER BY airport ASC
     ```
 
    - Grado
+
+   Con esto podemos llegar a saber que ciudad sobre que pais es más influyente. De esta manera podremos determinar por ejemplo 
+   si queremos hacer un estudio de turismo que ciudad es la que probablemente vaya a destacar más en cuanto a visitantes.
 
        Proyección
     ```
         MATCH (source:City)-[r:IN_COUNTRY]->(target:Country)
         RETURN gds.graph.project(
         'Graph_Degree',
-            source,
-            target,
-        { relationshipProperties: r { .distance } }
+                source,
+                target,
+            { relationshipProperties: r { .distance } }
         )
     ```
 
@@ -676,6 +689,9 @@ Llamada
     ```
 
    - Cercanía
+
+    Por ejemplo si una aerolinea desea expandir sus vuelos, para tener la mayor eficiencia podemos ver que tan cerca esta el aeropuerto para determinar
+    por ejemplo una ruta.
 
     Proyección
     ```
@@ -699,15 +715,17 @@ Llamada
    
    - Conteo de triángulos
 
+    Queremos evaluar qué países de diferentes continentes están conectados a través de aeropuertos compartidos o rutas comunes, para entender las dinámicas del tráfico intercontinental.
+
     Proyección
     ```
-        MATCH (source:Airport)-[r:IN_COUNTRY]->(target:Country)
+        MATCH (source:Country)-[r:ON_CONTINENT]->(target:Continent)
         RETURN gds.graph.project(
-        'Graph_triangleCount',
-        source,
-        target,
-        {},
-        { undirectedRelationshipTypes: ['*'] }
+            'Graph_triangleCount',
+            source,
+            target,
+            {},
+            { undirectedRelationshipTypes: ['*'] }
         )
     ```
 
@@ -715,15 +733,18 @@ Llamada
     ```
         CALL gds.triangleCount.stream('Graph_triangleCount')
         YIELD nodeId, triangleCount
-        RETURN gds.util.asNode(nodeId).iata AS airport, triangleCount
-        ORDER BY triangleCount DESC, name ASC
+        RETURN gds.util.asNode(nodeId).code AS country, triangleCount
+        ORDER BY triangleCount DESC, country ASC
     ```
 
    - Coeficiente local de clustering
 
+    Una aerolínea desea evaluar la eficiencia de sus hubs locales en términos de conectividad. Para ello, busca determinar qué aeropuertos tienen un alto coeficiente de clustering local, 
+    lo que indica que los aeropuertos conectados a ellos también están bien conectados entre sí. Esto permitirá identificar aeropuertos clave para optimizar la coordinación de vuelos regionales
+
     Proyección
     ```
-        MATCH (source:City)-[r:ON_CONTINENT]->(target:Continent)
+        MATCH (source:Airport)-[r:HAS_ROUTE]->(target:Airport)
         RETURN gds.graph.project(
             'Graph_LCC',
             source,
@@ -737,19 +758,21 @@ Llamada
     ```
         CALL gds.localClusteringCoefficient.stream('Graph_LCC')
         YIELD nodeId, localClusteringCoefficient
-        RETURN gds.util.asNode(nodeId).name AS city, localClusteringCoefficient
-        ORDER BY localClusteringCoefficient DESC, city
+        RETURN gds.util.asNode(nodeId).iata AS airport, localClusteringCoefficient
+        ORDER BY localClusteringCoefficient DESC, airport
     ```
 
    - Strongly Connected Components
 
+    Queremos analizar regiones del mundo donde los países están fuertemente interconectados con sus continentes mediante rutas aéreas. El objetivo es encontrar componentes fuertemente conectados para identificar clústeres de países y continentes que tienen tráfico aéreo recíproco.
+
     Proyección
     ```
         MATCH (source:Country)-[r:ON_CONTINENT]->(target:Continent)
-        RETURN gds.graph.project(
-        'Graph_SCC',
-        source,
-        target
+            RETURN gds.graph.project(
+            'Graph_SCC',
+            source,
+            target
         )
     ```
 
@@ -763,6 +786,7 @@ Llamada
 
    - Otro de libre elección(K-Core Decomposition)
 
+    Si queremos identificar los aeropuertos clave que tienen conexiones fuertes con múltiples ciudades. Para encontrar aeropuertos que operen con una alta conectividad, lo que facilita una red más eficiente de vuelos hacia varias ciudades importantes.
 
     Proyección
     ```
@@ -788,15 +812,19 @@ Llamada
    
    - Similitud de nodo
 
+   Si queremos averiguar cuanto se parecen o comparten similitud 2 aeropuertos según si tienen conexiones iguales podemos realizar el siguiente algoritmo.
+   Esto nos puede llegar a ser útil si queremos llegar a de un aeropuerto a otro y queremos comparar que opción nos puede llegar a salir más rentable
+   dependiendo de otras cosas, con la seguridad de que los dos aeropuertos nos pueden llegar al mismo destino.
+
     Proyección
     ```
         MATCH (source:Airport)
         OPTIONAL MATCH (source)-[r:ON_CONTINENT]->(target:Continent)
         RETURN gds.graph.project(
-        'Graph_Similarity',
-        source,
-        target,
-        { relationshipProperties: r { strength: coalesce(r.strength, 1.0) } }
+            'Graph_Similarity',
+            source,
+            target,
+            { relationshipProperties: r { strength: coalesce(r.strength, 1.0) } }
         )
     ```
 
@@ -808,27 +836,36 @@ Llamada
         ORDER BY similarity DESCENDING, airport1, airport2
     ```
 
-   - Otro de libre elección(Filtered Node Similarity)
+   - Otro de libre elección(K-Nearest Neighbors)
+
+    Si queremos buscar una ruta eficiente entre dos aeropuertos pero no hemos planteado cuales y queremos averiguarlo podemos usar KNN. De esta manera
+    si una conexión directa no está disponible, podemos ver aeropuertos alternativos cercanos.
 
        Proyección
     ```
-        MATCH (source)
-        OPTIONAL MATCH (source:Airport)-[r:HAS_ROUTE]->(target:Airport)
+        MATCH (p:Airport)
         RETURN gds.graph.project(
-            'Graph_FilteredSimilarity',
-            source,
-            target,
+            'Graph_KNN',
+            p,
+            null,
             {
-                sourceNodeLabels: labels(source),
-                targetNodeLabels: labels(target),
-                relationshipProperties: r { strength: coalesce(r.strength, 1.0) }
+                sourceNodeProperties: p { .distance },
+                targetNodeProperties: {}
             }
         )
     ```
 
     Llamada
     ```
-        CALL gds.nodeSimilarity.filtered.stream('Graph_FilteredSimilarity', {sourceNodeFilter:'Airport' , targetNodeFilter:'Airport' } )
+        CALL gds.knn.stream('Graph_KNN', {
+            topK: 1,
+            nodeProperties: ['distance'],
+            // The following parameters are set to produce a deterministic result
+            randomSeed: 1337,
+            concurrency: 1,
+            sampleRate: 1.0,
+            deltaThreshold: 0.0
+        })
         YIELD node1, node2, similarity
         RETURN gds.util.asNode(node1).iata AS Airport1, gds.util.asNode(node2).iata AS Airport2, similarity
         ORDER BY similarity DESCENDING, Airport1, Airport2
@@ -840,12 +877,12 @@ Llamada
 
    1º- Algoritmo de Yen
    
-    Queremos realizar un viaje desde el aeropuerto de Málaga a la ciudad de New York. Para ello vamos a considerar los caminos más
+    Queremos realizar un viaje desde el aeropuerto de Málaga a Austria. Para ello vamos a considerar los caminos más
     cortos haciendo escala y de minimo coste que podemos coger para realizar dicho viaje.
 
    Proyección
    ```
-        MATCH (source:Airport)-[r:IN_CITY]->(target:City)
+        MATCH (source:Airport)-[r:HAS_ROUTE]->(target:Airport)
         RETURN gds.graph.project(
             'Graph_Yens2',
             source,
@@ -856,7 +893,7 @@ Llamada
 
    Llamada
    ```
-        MATCH (source:Airport {iata: 'AGP'}), (target:City {name: 'New York'})
+        MATCH (source:Airport {iata: 'AGP'}), (target:Airport {iata: 'AUA'})
         CALL gds.shortestPath.yens.stream('Graph_Yens2', {
             sourceNode: source,
             targetNode: target,
@@ -867,7 +904,7 @@ Llamada
         RETURN
             index,
             gds.util.asNode(sourceNode).iata AS sourceAirport,
-            gds.util.asNode(targetNode).name AS targetCity,
+            gds.util.asNode(targetNode).iata AS targetCity,
             totalCost AS totalDistance,
             [nodeId IN nodeIds | gds.util.asNode(nodeId).iata] AS Airport,
             costs AS distance,
@@ -878,7 +915,7 @@ Llamada
     2º- Centralidad de Cercanía
 
     Queremos oranizar un viajea través de una red global de aeropuertos, pero queremos la forma más rápida y eficiente de conectar diferentes destinos.
-    Sin tiempos de tránsito. De esta manera podemos averiguar que aeropuertos son más centrales según que región.
+    Sin tiempos de tránsito. Para ello vamos a averiguar que regiones son más centrales según que aeropuerto.
 
 
     Proyección
@@ -895,24 +932,24 @@ Llamada
     ```
         CALL gds.closeness.stream('Graph_Closeness2')
         YIELD nodeId, score
-        RETURN gds.util.asNode(nodeId).iata AS airport, score
+        RETURN gds.util.asNode(nodeId).name AS region, score
         ORDER BY score DESC
     ```
 
     3º- Conteo de triángulos
 
     Queremos averiguar que aeropuertos tienen un alto número de triangulos en su país para así determinar que país tiene mayor número de
-    conexiones aéreas a nivel nacional.
+    conexiones aéreas a nivel nacional. Gracias a esto, podremos determinar que viajes serán más cortos si queremos viajar a algún lugar cercano.
 
     Proyección
     ```
         MATCH (source:Airport)-[r:IN_COUNTRY]->(target:Country)
         RETURN gds.graph.project(
         'Graph_triangleCount2',
-        source,
-        target,
-        {},
-        { undirectedRelationshipTypes: ['*'] }
+            source,
+            target,
+            {},
+            { undirectedRelationshipTypes: ['*'] }
         )
     ```
 
@@ -921,5 +958,5 @@ Llamada
         CALL gds.triangleCount.stream('Graph_triangleCount2')
         YIELD nodeId, triangleCount
         RETURN gds.util.asNode(nodeId).iata AS airport, triangleCount
-        ORDER BY triangleCount DESC, name ASC
+        ORDER BY triangleCount DESC, airport ASC
     ```
