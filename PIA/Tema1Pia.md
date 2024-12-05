@@ -3,7 +3,9 @@ Introducción
 En proyectos de software es común emplear diferentes lenguajes de programación para tareas específicas:
 
 Lenguajes compilados: Usados en el núcleo funcional por su eficiencia y velocidad.
+
 Lenguajes interpretados: Más adecuados para prototipos o componentes menos críticos.
+
 La programación no es un proceso aislado, sino que forma parte de un ciclo complejo compuesto por:
 
 Especificación: Definición de los requisitos del software.
