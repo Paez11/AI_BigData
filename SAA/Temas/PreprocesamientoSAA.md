@@ -42,7 +42,8 @@ La estadística descriptiva busca resumir la información en los datos de manera
 ## 5.2 Distribución normal
 
 ### Concepto
-La distribución normal es una de las más importantes en estadística, representada como una "campana de Gauss".
+
+La distribución normal en estadística se proponen modelos para reflejar como varían los posibles valores, o más precisamente qué probabilidad tiene que el valor de la variable se encuentre en un determinado intervalo. Normalmente, representada como una "campana de Gauss". La caracterización de una variable aleatoria continua viene definida por dos funciones, función de densidaddeprobabilidad (f.d.p) y función de distribución acumulada o simplemente función de distribución (F.D.).
 
 ### Características principales
 - Definida por dos parámetros: media (`µ`) y varianza (`σ²`).
@@ -122,6 +123,9 @@ El rango de las variables puede afectar los resultados. Por ejemplo, una variabl
 
 ### Problema
 Las bases de datos pueden contener miles de variables, lo que aumenta la complejidad computacional y la dificultad de interpretación.
+En el análisis cluster se suele recurrir a la reducción de la dimensionalidad de la matriz de datos X mediante análisis de componentes principales que transformala anterior matriz a una matriz X de dimensiones mucho menor que la original.
+
+En problemas de clasificación y regresión se utilizan las medidas de correlación entre la variable respuesta y y el conjunto de regresores (características) xi quedándose con las que tienen mayores correlaciones. Se intenta considerar sólo aquellas que tienen mayor información de la variable de interés y. Las medidas de correlación intentan medir el grado de dependencia entre dos variables. La medida de este tipo más conocida y aplicada es el coeficiente de correlación de Pearson .
 
 ### Estrategias
 1. **Reducción de dimensionalidad:**
@@ -145,5 +149,4 @@ Asignar importancia relativa a las variables.
 
 ---
 
-Este capítulo incluye ejemplos prácticos para implementar estas técnicas en Python, facilitando su comprensión y aplicación en análisis reales.
 
