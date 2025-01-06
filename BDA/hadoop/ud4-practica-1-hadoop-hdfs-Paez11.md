@@ -6,17 +6,20 @@
 
 1. Explica paso a paso el proceso de lectura (indicando qué bloques y los datanodes empleados) que realiza HDFS si queremos leer el archivo `/logs/101213.log`  _(RA5075.3 / CE.3a)_ 
 
+- Archivos:
+/logs/042814.log dividido en bloques: B1, B2, y B3.
+/logs/101213.log dividido en bloques: B4 y B5.
+- NameNode:
+Contiene la metainformación que indica qué bloques forman cada archivo y en qué DataNodes están replicados los bloques.
+- DataNodes:
+Existen 4 nodos donde están distribuidos los bloques (Nodo 1, Nodo 2, Nodo 3, Nodo 4) con las réplicas correspondientes.
+
+Proceso de lectura:
 - El cliente que desea leer un fichero de HDFS, mediante una librería instalada en su equipo, realiza una llamada al Namenode para conocer qué bloques forman un fichero (llamemos X al fichero), así como los Datanodes que contienen cada uno de los bloques.
 - El Namenode retorna dicha información, y ordena para cada bloque los Datanodes que contienen dicho bloque en función de la distancia al cliente (un algoritmo evalúa la distancia entre el cliente y cada Datanode). El objetivo de esta lista ordenada es intentar reducir el tiempo de acceso a cada Datanode desde el cliente.
 - Con la información recibida del Namenode, el cliente se comunica directamente con el Datanode 1 para solicitarle el primer bloque.
 - El cliente se comunica con el Datanode 2 para obtener el bloque 2.
 - El cliente se comunica con el Datanode 1 para obtener el bloque 3.
-
-<figure style="align: center;">
-    <img src="img/UD4_LecturaHDFS_ejercicio.png">
-    <figcaption>Proceso de lectura HDFS</figcaption>
-</figure>
-
 
 2. En este ejercicio vamos a practicar los comandos básicos de **HDFS**. Una vez arrancado Hadoop _(RA5075.3 / CE.3a y CE.3c)_:
 - Crea la carpeta `/bda/ejercicios`.
@@ -53,7 +56,10 @@ hdfs dfs -ls /bda/ejercicios
 
 - Crea una copia en HDFS y llámala `Apellido1Apellido2Nombre2.txt`.
 
-```
+```cmd
+
+
+
 ```
 
 - Comprueba que se ha creado correctamente el fichero `Apellido1Apellido2Nombre2.txt`.
