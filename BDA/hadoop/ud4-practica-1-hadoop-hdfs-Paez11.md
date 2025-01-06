@@ -6,6 +6,11 @@
 
 1. Explica paso a paso el proceso de lectura (indicando qué bloques y los datanodes empleados) que realiza HDFS si queremos leer el archivo `/logs/101213.log`  _(RA5075.3 / CE.3a)_ 
 
+<figure style="align: center;">
+    <img src="img/UD4_LecturaHDFS_ejercicio.png">
+    <figcaption>Proceso de lectura HDFS</figcaption>
+</figure>
+
 - Archivos:
 /logs/042814.log dividido en bloques: B1, B2, y B3.
 /logs/101213.log dividido en bloques: B4 y B5.
