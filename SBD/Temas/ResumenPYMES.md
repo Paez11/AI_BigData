@@ -107,9 +107,9 @@ El Big Data permite fundamentar decisiones empresariales con:
 Se evalúa si un proyecto genera valor:
 
 #### Fórmula:
-\[
-VAN = \sum \frac{F_t}{(1+k)^t} - I_0
-\]
+
+![van](https://github.com/user-attachments/assets/97569cab-e981-45d9-b162-1e4b2a4aa490)
+
 Donde:
 - **I₀** = inversión inicial.
 - **Fₜ** = flujo de caja en el tiempo t.
@@ -123,9 +123,8 @@ Si el **VAN > 0**, el proyecto es rentable.
 Se mide la eficiencia de la inversión:
 
 #### Fórmula:
-\[
-ROI = \frac{VAN}{I_0} \times 100
-\]
+
+![roi](https://github.com/user-attachments/assets/cea96149-3f63-4926-a6dd-577b2ac35f61)
 
 Si el **ROI es alto**, la inversión es atractiva.
 
@@ -133,6 +132,15 @@ Si el **ROI es alto**, la inversión es atractiva.
 
 ### **Ejemplo de TIR en Python**
 La **Tasa Interna de Retorno (TIR)** mide la rentabilidad anualizada.
+
+Es un indicador de rentabilidad de proyectos o inversiones, de manera que cuanto mayor
+sea el TIR, mejor es la rentabilidad. Representa el porcentaje de rendimiento que se
+espera obtener sobre el dinero invertido, considerando el valor del dinero en el tiempo y
+los flujos de efectivo esperados del proyecto.
+
+![tir](https://github.com/user-attachments/assets/4dcaf125-7630-433d-8edc-c8305a4006e3)
+
+
 
 Código en Python:
 ```python
