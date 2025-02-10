@@ -1,4 +1,4 @@
-# Resumen Extenso: Procesamiento de Lenguaje Natural (NLP)
+# Procesamiento de Lenguaje Natural (NLP)
 
 ## Introducción
 
