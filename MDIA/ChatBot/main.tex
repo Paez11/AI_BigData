@@ -23,6 +23,7 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage[backend=biber]{biblatex}
+\addbibresource{webgrafia.bib}
 
 \pagestyle{fancy}
 \renewcommand{\footrulewidth}{0.4pt}
@@ -140,6 +141,138 @@ respuestas más personalizadas.
 
 \clearpage
 
+\section{Scripts}
+
+Para la optimización del chatbot, se han desarrollado scripts y configuraciones específicas que permiten gestionar reservas, calcular precios y
+proporcionar respuestas contextuales. Estos scripts se han integrado en el flujo conversacional y se ejecutan en función de las necesidades del usuario.
+
+\subsection{Cálculo del Precio de la Reserva}
+
+El siguiente script se encarga de calcular el precio total de una reserva en función de la fecha de entrada, la fecha de salida, el tipo de habitación
+y el número de personas. El precio de la habitación se define en un objeto con los precios por tipo de habitación, y se calcula multiplicando el precio
+por noche por el número de noches y el número de personas. El resultado se almacena en la variable workflow.precio\_total y se devuelve al usuario.
+
+\begin{verbatim}
+
+    const precioHabitacion = {
+      simple: 80,
+      doble: 120,
+      suite: 200
+    };
+    
+    //  Verificar que workflow está definido
+    if (!workflow || typeof workflow !== "object") {
+      throw new Error(" Error: El objeto 'workflow' no está definido o no es válido.");
+    }
+    
+    //  Validar que los datos existen y son correctos
+    if (!workflow.fecha_entrada || !workflow.fecha_salida || !workflow.tipo_habitacion || !workflow.numero_personas) {
+      throw new Error(" Faltan datos para calcular el precio total.");
+    }
+    
+    //  Asegurar que las fechas sean cadenas y convertirlas a Date
+    if (typeof workflow.fecha_entrada !== "string" || typeof workflow.fecha_salida !== "string") {
+      throw new Error(" Error: Las fechas deben ser cadenas en formato válido (YYYY-MM-DD).");
+    }
+    
+    const fechaEntrada = new Date(workflow.fecha_entrada);
+    const fechaSalida = new Date(workflow.fecha_salida);
+    
+    if (isNaN(fechaEntrada.getTime()) || isNaN(fechaSalida.getTime())) {
+      throw new Error(" Las fechas ingresadas no son válidas.");
+    }
+    
+    //  Calcular número de noches
+    const noches = Math.ceil((fechaSalida.getTime() - fechaEntrada.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (noches <= 0) {
+      throw new Error(" La fecha de salida debe ser posterior a la fecha de entrada.");
+    }
+    
+    //  Validar y obtener el precio de la habitación
+    const tipoHabitacion = workflow.tipo_habitacion.trim().toLowerCase();
+    const precioPorNoche = precioHabitacion[tipoHabitacion];
+    
+    if (!precioPorNoche) {
+      throw new Error(" El tipo de habitación ingresado no es válido.");
+    }
+    
+    //  Validar y convertir el número de personas
+    const numeroPersonas = parseInt(workflow.numero_personas, 10);
+    if (isNaN(numeroPersonas) || numeroPersonas <= 0) {
+      throw new Error(" Error: La cantidad de personas debe ser un número válido y mayor a 0.");
+    }
+    
+    //  Cálculo del precio total
+    workflow.precio_total = precioPorNoche * noches * numeroPersonas;
+    
+    console.log(" Precio total calculado:", workflow.precio_total);
+    
+    // Devolver el resultado
+    return { totalReserva: workflow.precio_total };
+
+\end{verbatim}
+
+\subsection{Itinerario de viaje}
+
+El siguiente script genera un itinerario de viaje personalizado para el usuario, basado en la fecha de entrada y la fecha de salida proporcionadas.
+El itinerario incluye una lista de actividades recomendadas en Málaga, que se repiten en un ciclo para cubrir todas las noches de la estancia.
+
+\begin{verbatim}
+
+    //  Actividades recomendadas en Málaga por día
+    const actividadesMalaga = [
+    "Visita la Alcazaba y el Teatro Romano ",
+    "Paseo por la Calle Larios y Plaza de la Constitución ",
+    "Día de playa en La Malagueta ",
+    "Tour por el Museo Picasso ",
+    "Excursión a Mijas o Ronda ",
+    "Ruta gastronómica por los mercados de Málaga ",
+    "Día de senderismo en el Caminito del Rey "
+    ];
+
+    //  Verificar que los datos existen
+    if (!workflow.fecha_entrada || !workflow.fecha_salida) {
+    throw new Error(" Faltan datos para generar el itinerario.");
+    }
+
+    //  Convertir las fechas a formato válido
+    const fechaEntrada = new Date(workflow.fecha_entrada);
+    const fechaSalida = new Date(workflow.fecha_salida);
+
+    //  Verificar si las fechas son válidas
+    if (isNaN(fechaEntrada.getTime()) || isNaN(fechaSalida.getTime())) {
+    throw new Error(" Las fechas ingresadas no son válidas.");
+    }
+
+    //  Calcular número de noches correctamente
+    const noches = Math.ceil((fechaSalida.getTime() - fechaEntrada.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (noches <= 0) {
+    throw new Error(" La fecha de salida debe ser posterior a la fecha de entrada.");
+    }
+
+    //  Generar itinerario personalizado
+    let itinerario = [];
+    for (let i = 0; i < noches; i++) {
+    let actividad = actividadesMalaga[i % actividadesMalaga.length]; // Rotación de actividades
+    itinerario.push(Día ${i + 1}: ${actividad});
+    }
+
+    //  Guardar en workflow para usar en Botpress
+    workflow.itinerario = itinerario.join("\n");
+
+    //  Mostrar en la consola (para debugging)
+    console.log(" Itinerario generado:");
+    console.log(workflow.itinerario);
+
+    //  Devolver el resultado
+    return { planViaje: workflow.itinerario };
+
+\end{verbatim}
+
+\section{Configuración}
+
 \subsection{Prompts y Respuestas Contextuales}
 
 El chatbot cuenta con diferentes prompts configurados para adaptarse a las respuestas del usuario. Mediante el uso de condiciones y reglas en Botpress, 
@@ -168,6 +301,46 @@ Booking se ha logrado mediante la ejecución de consultas API desde los módulos
 
 Enlace para el chatbot: \href{https://cdn.botpress.cloud/webchat/v2.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/02/20/18/20250220181209-C0YQTWRL.json}{Hotel-Chatbot}
 
+A continuación vamos a ver una serie de capturas de pantalla de la demostración del chatbot en acción.
+Simulando la interacción con un usuario medio. (Nuestro chatbot a tenido un contratiempo Y
+las fechas de las reservas hay que indicarlas en formato YYYY-MM-DD)
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth]{assets/ejemplo/conver-1.PNG}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth]{assets/ejemplo/conver-2.PNG}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth]{assets/ejemplo/conver-3.PNG}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth]{assets/ejemplo/conver-4.PNG}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth]{assets/ejemplo/conv-5.PNG}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth]{assets/ejemplo/conv-6.PNG}
+    \label{fig:my_label}
+\end{figure}
+
 \clearpage
 
 \section{Conclusión}
@@ -179,5 +352,11 @@ sino que también mejora la satisfacción de los huéspedes al ofrecer respuesta
 
 
 \clearpage
+
+\section{Bibliografia}
+
+\cite{Botpress}
+
+\printbibliography
 
 \end{document}
