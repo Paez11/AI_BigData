@@ -73,6 +73,29 @@ def plot_volume_evolution():
     plt.show()
 
 
+def create_video():
+    output_folder = "output_pan"
+    images = [img for img in os.listdir(output_folder) if img.endswith('.jpg') or img.endswith('.png')]
+    images.sort()  # Ordenar imágenes alfabéticamente
+
+    if not images:
+        print("No se encontraron imágenes para crear el video.")
+        return
+
+    frame = cv2.imread(os.path.join(output_folder, images[0]))
+    height, width, _ = frame.shape
+    video_path = os.path.join(output_folder, "proceso_fermentacion.mp4")
+
+    video = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'mp4v'), 1, (width, height))
+
+    for image in images:
+        frame = cv2.imread(os.path.join(output_folder, image))
+        video.write(frame)
+
+    video.release()
+    print(f"Video guardado como: {video_path}")
+
+
 def process_images():
     folder_path = "pan"
     image_files = sorted([f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))])
@@ -123,8 +146,9 @@ def process_images():
         volumenes.append(volume_cm3)
         etiquetas_tiempo.append(texto_tiempo)
 
-    # Llamar a la función de graficado
+    # Llamar a la función de graficado y creación de video
     plot_volume_evolution()
+    create_video()
 
 
 if __name__ == "__main__":
