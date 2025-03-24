@@ -91,5 +91,3 @@ Este modelo describe cómo los datos se transforman en conocimiento útil para l
 
 ---
 
-¿Te gustaría que continúe expandiendo el contenido aún más?
-
