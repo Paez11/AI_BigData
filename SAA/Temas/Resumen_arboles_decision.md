@@ -3,7 +3,7 @@
 ## 4.1. Árboles de Decisión
 
 Los árboles de decisión son una técnica de aprendizaje automático por inducción que permiten identificar conceptos (clases de objetos) a partir de las características de un conjunto de ejemplos que los representan. La información extraída de los mismos queda organizada jerárquicamente en forma de árbol, es decir, en forma de grafo dirigido que consta de nodos y arcos. Los nodos corresponden a una pregunta o a un test que se hace a los ejemplos.  
-El árbol de decisión (ver Figura 4.1) se construye a base de ir haciendo preguntas sobre características determinadas a los ejemplos y clasificándolos según la respuesta. Por tanto un árbol de decisión trabaja como un "clasificador".  
+El árbol de decisión se construye a base de ir haciendo preguntas sobre características determinadas a los ejemplos y clasificándolos según la respuesta. Por tanto un árbol de decisión trabaja como un "clasificador".  
 Las diferentes opciones de clasificación (respuesta a las preguntas) son excluyentes entre sí, lo que hace que a partir de casos desconocidos y siguiendo el árbol adecuadamente, se llegue a una única conclusión o decisión a tomar.  
 
 ### Construcción de un árbol de decisión
