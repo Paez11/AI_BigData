@@ -65,6 +65,18 @@ Donde los coeficientes \( \beta_k \) indican la relación entre las variables pr
 5. Selección del mejor modelo.
 6. Evaluación.
 
+- `LinearRegression()` en **Scikit-Learn** resuelve la **regresión lineal** analíticamente usando la fórmula cerrada de **mínimos cuadrados (OLS)**. Es rápido para **datos pequeños o medianos**.  
+
+- `SGDRegressor()` en **Scikit-Learn** utiliza el **descenso por gradiente estocástico (SGD)**, siendo útil para **datasets muy grandes**. Tiene hiperparámetros importantes como:  
+  - `loss`  
+  - `penalty`  
+  - `alpha`  
+  - `learning_rate`  
+  - `max_iter`  
+  - `tol`  
+  - `early_stopping`, etc.  
+
+
 # **Regularización en Regresión**  
 
 La **regularización** en regresión es una técnica utilizada para evitar el sobreajuste penalizando los coeficientes del modelo. 
