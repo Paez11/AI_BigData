@@ -65,6 +65,43 @@ Donde los coeficientes \( \beta_k \) indican la relación entre las variables pr
 5. Selección del mejor modelo.
 6. Evaluación.
 
+# **Regularización en Regresión**  
+
+La **regularización** en regresión es una técnica utilizada para evitar el sobreajuste penalizando los coeficientes del modelo. 
+Se agrega un término de penalización a la función de pérdida para reducir la magnitud de los coeficientes y mejorar la capacidad de generalización del modelo.  
+
+## **Tipos de Regularización en Regresión**  
+
+### **1. Ridge Regression (L2)**  
+- Agrega una penalización proporcional al cuadrado de los coeficientes:  
+  \[
+  \text{Loss} = \sum (y_i - \hat{y}_i)^2 + \lambda \sum \beta_j^2
+  \]
+- Hace que los coeficientes sean más pequeños pero rara vez los reduce a cero.  
+- Útil cuando hay colinealidad entre variables.  
+
+### **2. Lasso Regression (L1)**  
+- Agrega una penalización proporcional al valor absoluto de los coeficientes:  
+  \[
+  \text{Loss} = \sum (y_i - \hat{y}_i)^2 + \lambda \sum |\beta_j|
+  \]
+- Puede hacer que algunos coeficientes sean exactamente cero, lo que actúa como selección de características.  
+
+### **3. Elastic Net (L1 + L2)**  
+- Combina ambas penalizaciones:  
+  \[
+  \text{Loss} = \sum (y_i - \hat{y}_i)^2 + \lambda_1 \sum |\beta_j| + \lambda_2 \sum \beta_j^2
+  \]
+- Útil cuando hay muchas variables correlacionadas y queremos selección de características.  
+
+## **¿Cuándo usar regularización?**  
+- Si el modelo tiene **muchos parámetros** y riesgo de sobreajuste.  
+- Si hay **colinealidad** entre variables predictoras.  
+- Si queremos **seleccionar automáticamente variables** importantes (Lasso o Elastic Net).  
+
+En general, la regularización ayuda a mejorar la capacidad de generalización del modelo reduciendo la complejidad y evitando que aprenda patrones espurios.
+
+
 # 5.3. Máquinas de Vectores de Soporte (SVM)
 
 Las **Máquinas de Vectores de Soporte (SVM)** son modelos de clasificación eficientes basados en hiperplanos de separación.
