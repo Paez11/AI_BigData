@@ -99,9 +99,6 @@ Se agrega un término de penalización a la función de pérdida para reducir la
 - Si hay **colinealidad** entre variables predictoras.  
 - Si queremos **seleccionar automáticamente variables** importantes (Lasso o Elastic Net).  
 
-En general, la regularización ayuda a mejorar la capacidad de generalización del modelo reduciendo la complejidad y evitando que aprenda patrones espurios.
-
-
 # 5.3. Máquinas de Vectores de Soporte (SVM)
 
 Las **Máquinas de Vectores de Soporte (SVM)** son modelos de clasificación eficientes basados en hiperplanos de separación.
@@ -139,3 +136,38 @@ Scikit-Learn proporciona herramientas para ajustar modelos SVM con diferentes ke
 
 - Costoso computacionalmente para grandes volúmenes de datos.
 - Sensible a la elección del hiperparámetro \( C \).
+
+# **Descenso del Gradiente**  
+
+El **descenso del gradiente** es un algoritmo de optimización utilizado para minimizar una función de costo ajustando iterativamente los parámetros de un modelo en la dirección del gradiente negativo. Se usa ampliamente en problemas de **regresión, clasificación y redes neuronales**.  
+
+## **¿Cómo funciona?**  
+1. **Calcula el gradiente** (derivada parcial) de la función de costo con respecto a cada parámetro.  
+2. **Actualiza los parámetros** en la dirección opuesta al gradiente para reducir el error:  
+   \[
+   \theta = \theta - \alpha \nabla J(\theta)
+   \]  
+   donde:  
+   - \( \theta \) son los parámetros del modelo.  
+   - \( \alpha \) es la tasa de aprendizaje (learning rate).  
+   - \( \nabla J(\theta) \) es el gradiente de la función de costo \( J(\theta) \).  
+
+3. **Repite el proceso** hasta que la función de costo converja o se alcance el número máximo de iteraciones.  
+
+## **Tipos de Descenso del Gradiente**  
+### **1. Gradiente Descendente por Lote (Batch Gradient Descent)**  
+- Usa **todo el conjunto de datos** en cada actualización.  
+- Convergencia más estable pero más lenta.  
+
+### **2. Gradiente Descendente Estocástico (Stochastic Gradient Descent, SGD)**  
+- Usa **un solo ejemplo** aleatorio en cada actualización.  
+- Convergencia más rápida pero con mayor variabilidad.  
+
+### **3. Gradiente Descendente Mini-Lote (Mini-Batch Gradient Descent)**  
+- Usa **un pequeño subconjunto** de datos en cada iteración.  
+- Es un equilibrio entre estabilidad y velocidad.  
+
+## **¿Cuándo se usa?**  
+- En modelos de **aprendizaje automático y redes neuronales** para optimizar funciones de costo.  
+- Cuando las derivadas de la función de costo pueden calcularse fácilmente.  
+- En grandes volúmenes de datos donde los métodos exactos son computacionalmente costosos.  
