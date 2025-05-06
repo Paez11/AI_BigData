@@ -369,6 +369,9 @@ El algoritmo K-means funciona bien con clusters **linealmente separables**, dond
 
 Pero cuando los datos **no son separables linealmente** (por ejemplo, clusters en forma de anillo), K-means falla.
 
+
+![densidad2](https://github.com/user-attachments/assets/3a41abf3-1247-4ab6-8ca8-9c1755cdaac2)
+
 ---
 
 ### Solución: Proyección al espacio de características
@@ -381,8 +384,6 @@ Este nuevo espacio:
 - Puede tener **dimensión infinita** (espacio de funciones)
 
 ---
-
-![densidad2](https://github.com/user-attachments/assets/3a41abf3-1247-4ab6-8ca8-9c1755cdaac2)
 
 ### Espacios RKHS y núcleos
 
