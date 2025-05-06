@@ -282,7 +282,7 @@ donde \( B(x_i, \varepsilon) \) es la **bola abierta** centrada en \( x_i \) y d
 
 ![densidad](https://github.com/user-attachments/assets/602fa5e3-ccaf-41d3-b3f2-bf2233e7e9b5)
 
-## Definición 8: Densamente conectados
+** Definición 8: Densamente conectados **
 
 Dos puntos \(x_i\) y \(x_j\) están conectados densamente si existe un punto \(x\) de modo que tanto \(x_i\) como \(x_j\) son alcanzables directamente desde \(x\).
 
