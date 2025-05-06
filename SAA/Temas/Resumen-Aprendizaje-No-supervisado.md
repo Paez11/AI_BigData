@@ -68,6 +68,7 @@ El problema de análisis clúster se formula mediante el siguiente **modelo de o
 ```plaintext
 maximizar J(P)
 sujeto a: P ∈ P(C)
+```
 
 Donde J(P) es una función que calcula la calidad de la partición P, en ocasiones recibe el nombre de función de mérito.
 
@@ -279,7 +280,7 @@ donde \( B(x_i, \varepsilon) \) es la **bola abierta** centrada en \( x_i \) y d
 **Observación**: La relación de alcanzabilidad **no es simétrica**, porque solo se puede alcanzar directamente desde **puntos núcleo**.
 
 
-densidad.PNG
+![densidad](https://github.com/user-attachments/assets/602fa5e3-ccaf-41d3-b3f2-bf2233e7e9b5)
 
 ### Definición 8: Densamente conectados
 
@@ -380,6 +381,8 @@ Este nuevo espacio:
 - Puede tener **dimensión infinita** (espacio de funciones)
 
 ---
+
+![densidad2](https://github.com/user-attachments/assets/3a41abf3-1247-4ab6-8ca8-9c1755cdaac2)
 
 ### Espacios RKHS y núcleos
 
