@@ -251,7 +251,7 @@ Dos algoritmos destacados en este enfoque son:
 
 ### 7.2.1. DBSCAN
 
-**DBSCAN** fue introducido en [EKSX96] con el objetivo de:
+DBSCAN fue introducido con el objetivo de poder descubrir **clusters con forma arbitraria** y, además, poseer una buena eficiencia en grandes bases de datos. Este algoritmo se basa en el concepto de **densidad** y solo requiere **dos hiperparámetros** de entrada, existiendo técnicas para determinar los valores apropiados.
 
 - Detectar **clusters con formas arbitrarias**
 - Ser **eficiente en grandes bases de datos**
@@ -282,82 +282,90 @@ donde \( B(x_i, \varepsilon) \) es la **bola abierta** centrada en \( x_i \) y d
 
 ![densidad](https://github.com/user-attachments/assets/602fa5e3-ccaf-41d3-b3f2-bf2233e7e9b5)
 
-### Definición 8: Densamente conectados
+## Definición 8: Densamente conectados
 
-Dos puntos \( x_i \) y \( x_j \) están **conectados densamente** si existe un punto \( x \) tal que tanto \( x_i \) como \( x_j \) son **alcanzables directamente** desde \( x \).
+Dos puntos \(x_i\) y \(x_j\) están conectados densamente si existe un punto \(x\) de modo que tanto \(x_i\) como \(x_j\) son alcanzables directamente desde \(x\).
 
 ---
 
 ### DBSCAN – Pasos del algoritmo
 
-- **Paso 0 (Inicialización)**:
-  - Elegir los parámetros \( \varepsilon \) y `minPts`.
-  - Calcular la densidad de cada punto \( i \) usando la ecuación (7.1).
-  - Inicializar el conjunto de **puntos núcleo** \( X_N \).
+- **Paso 0 (Inicialización):**  
+  Elegir los parámetros \(\varepsilon\) y `minPts`.  
+  – **Cálculo de las densidades:** Calcular la densidad de cada punto \(i\) empleando la ecuación (7.1).  
+  – **Inicialización de conjuntos:** Inicializar el conjunto de puntos núcleo.
 
-- **Paso 1 (Expansión del cluster)**:
-  - Para todo \( p \in X_N \subseteq X_e \):
-    - Tomar \( X_e = X_e \setminus \{p\} \)
-    - Inicializar un nuevo cluster \( C = B(p) \cap X \)
-    - Mientras \( C \nsubseteq X_e \):
-      - Tomar \( q \in C \cap X_e \)
-      - Hacer \( X_e = X_e \setminus \{q\} \)
-      - Si \( q \in X_N \), actualizar \( C = C \cup (B(q) \cap X) \)
+- **Paso 1:**  
+  Para todo \(p \in X_N \subseteq X_e\), hacer:  
+  Tomar \(X_e = X_e \setminus \{p\}\).  
+  Inicializa un nuevo cluster como \(C = B(p) \cap X\).  
+  While \(C \nsubseteq X_e\):  
+  Tomar un \(q \in C \cap X_e\), haz \(X_e = X_e \setminus \{q\}\).  
+  Si \(q \in X_N\), entonces \(C = C \cup (B(q) \cap X)\).
 
-- **Paso 2 (Etiquetado de outliers)**:
-  - Asignar la etiqueta de **outlier** a los datos no etiquetados \( X_e \)
+- **Paso 2:**  
+  Asigna a los datos no etiquetados \(X_e\) la etiqueta de *outlier*.
 
 ---
 
 ### Ventajas e inconvenientes de DBSCAN
 
-**Ventajas**:
+**Ventajas:**
 
-- No requiere especificar el número de clusters \( K \).
-- Capaz de detectar **clusters con formas arbitrarias**.
-- Insensible a **outliers**.
-- Solo requiere **dos parámetros**.
-- Capaz de **detectar ruido**.
+- DBSCAN no necesita que el modelador le indique el número de clusters \(K\) a formar, a diferencia de K-means y FCM donde sí es necesario.
+- A diferencia de K-means, puede encontrar clusters no esféricos, de formas arbitrarias.
+- Como incorpora específicamente el concepto de *outliers*, es insensible a los mismos.
+- DBSCAN requiere solamente dos parámetros.
+- El orden de los datos en la base de datos afecta al agrupamiento de los puntos no núcleo y no ruido.
 
-**Inconvenientes**:
+**Inconvenientes:**
 
-- El orden de los datos **afecta al agrupamiento** de puntos no núcleo y no ruido.
-- **Maldición de la dimensionalidad**: en espacios de alta dimensión, la distancia pierde capacidad discriminativa.
-- DBSCAN **no agrupa bien clusters con densidades muy dispares**.
+- Cuando aumenta el número de dimensiones de los datos \(x_i\), la variabilidad de la distancia disminuye exponencialmente con el número de dimensiones, haciendo que la distancia se vuelva menos discriminativa. Este efecto se conoce con el nombre de la **maldición de la dimensionalidad**.
+- DBSCAN no puede agrupar bien grupos con densidades muy dispares, ya que en esos casos no se pueden ajustar correctamente los parámetros \(\varepsilon\) y `minPts`.
 
 ---
 
 ### 7.2.2. Algoritmo basado en picos de densidad (DPC)
 
-Este algoritmo se basa en dos hipótesis:
+Este algoritmo considera que los centros de los clusters tienen mayor densidad que sus vecinos, y también que están a una distancia relativamente grande de cualquier otro punto con mayor densidad. En una primera etapa, este método localiza los centros de los clusters, y en una segunda usa una estructura de entornos para asignar el cluster a los puntos restantes. El DPC puede detectar clusters con formas no convexas.
 
-- **Hipótesis 1**: Los centros de los clusters están rodeados de puntos con **menor densidad**.
-- **Hipótesis 2**: Los centros de los clusters están a una **distancia grande** de otros puntos con mayor densidad.
-
-DPC realiza dos fases:
-
-1. **Localiza los centros de los clusters**
-2. **Asigna los puntos restantes** al mismo cluster que su vecino más cercano de mayor densidad.
-
-> Puede detectar clusters **no convexos**, y es eficiente en grandes conjuntos de datos.
+1. El algoritmo es simple y eficiente.
+2. El DPC es adecuado para el análisis *cluster* para gran cantidad de datos porque los objetos se asignan a los clusters en una sola iteración, basándose en asignar el mismo cluster que su vecino más cercano con mayor densidad.
 
 ---
 
-#### Cálculo de la densidad
+#### Hipótesis básicas del DPC
 
-- **Bases de datos grandes**: número de vecinos a menos de \( d_c \).
-- **Bases de datos pequeñas**: uso de **núcleos gaussianos**.
+- **Hipótesis 1:** Los centros de los clusters están rodeados de vecinos con menor densidad.
+- **Hipótesis 2:** Los centros de los clusters están a una distancia relativamente grande de otros puntos con mayor densidad que ellos.
+
+La formulación matemática de estas dos hipótesis requiere la definición de dos magnitudes para cada objeto \(i\) a ser agrupado:
+
+1. Su densidad \(\rho_i\)
+2. Su distancia \(\delta_i\)
 
 ---
 
-#### Pasos del algoritmo DPC
+#### Cálculo de la densidad \(\rho_i\)
 
-1. **Inicialización**: Elegir parámetro \( d_c \)
-2. **Cálculo de distancias** \( d_{ij} \)
-3. **Cálculo de densidades** \( \rho_i \)
-4. **Cálculo de distancia mínima a un punto de mayor densidad** \( \delta_i \)
-5. **Gráfico de decisión**: seleccionar manualmente los centros
-6. **Asignación**: asignar cada punto al mismo cluster que su vecino más cercano de mayor densidad
+- **Para bases de datos grandes:** se mide como el número de puntos vecinos de \(i\) que se encuentran a una distancia inferior a \(d_c\) unidades.
+- **Para bases de datos de tamaño moderado:** se calcula a partir de funciones conocidas con el nombre de **núcleos gaussianos**.
+
+---
+
+Una vez obtenidos \(\rho_i\) y \(\delta_i\), se construye un **gráfico de decisión** (también denominado *grafo de decisión*), con el fin de seleccionar los centros, que serán puntos más separados del resto del gráfico, ya que tienen una densidad mayor que sus vecinos y también están separados de otros candidatos.  
+> El procedimiento requiere la intervención humana para seleccionar los centros manualmente.
+
+---
+
+### Pasos del algoritmo DPC
+
+- **Paso 0 (Inicialización):** Elegir el parámetro de distancia de corte \(d_c\).
+- **Paso 1 (Cálculo de distancias):** Calcular la matriz de distancias \(d_{ij}\).
+- **Paso 2 (Cálculo de densidades):** Calcular \(\rho_i\) para cada objeto \(i\) usando la fórmula correspondiente.
+- **Paso 3 (Distancia mínima a puntos de mayor densidad):** Calcular \(\delta_i\) para cada objeto \(i\).
+- **Paso 4 (Gráfico de decisión):** Dibujar el grafo de decisión y seleccionar manualmente los centros de los clusters.
+- **Paso 5 (Asignación):** Asignar los objetos restantes al mismo cluster que su vecino más cercano de mayor densidad.
 
 ---
 
@@ -365,68 +373,85 @@ DPC realiza dos fases:
 
 ### 7.3.1. Motivación
 
-El algoritmo K-means funciona bien con clusters **linealmente separables**, donde existe un hiperplano que divide los grupos.
+El algoritmo K-means es adecuado para identificar grupos que están **separados linealmente**. En esta situación, existe un hiperplano (en el caso de datos bidimensionales, se trata de una recta) que los separa.
 
-Pero cuando los datos **no son separables linealmente** (por ejemplo, clusters en forma de anillo), K-means falla.
+Si los datos tienen una distribución como la mostrada en la parte derecha de la figura 7.6, el algoritmo K-means no sería capaz de identificar los dos grupos. Cuando se produce esta disposición geométrica, se dice que los datos **no pueden ser separados linealmente**, es decir, no se puede dibujar una recta que deje a un lado los cuadrados y al otro los círculos.
 
-
-![densidad2](https://github.com/user-attachments/assets/3a41abf3-1247-4ab6-8ca8-9c1755cdaac2)
+![densidad2](https://github.com/user-attachments/assets/3b0f08e5-f489-414e-926a-4a9a02a0c11e)
 
 ---
 
 ### Solución: Proyección al espacio de características
 
-El **K-means con núcleos** proyecta los datos a un **espacio de características** donde los grupos sí sean linealmente separables.
+El algoritmo K-means con núcleos busca resolver esta problemática **proyectando los datos a un espacio donde sí estén separados linealmente**, y luego aplica K-means en dicho espacio. Este espacio se denomina **espacio de características**.
 
-Este nuevo espacio:
+En este espacio:
 
-- Tiene un **producto escalar**
-- Puede tener **dimensión infinita** (espacio de funciones)
+- Deben existir hiperplanos → se requiere un producto escalar.
+- Es distinto del espacio euclídeo original.
+- Puede tener dimensión infinita → espacio de funciones.
 
----
-
-### Espacios RKHS y núcleos
-
-Se utilizan los llamados **espacios de Hilbert con núcleo reproductor (RKHS)**, definidos por una función \( K(x, y) \), llamada **núcleo de Mercer**. El espacio se denota como \( \mathcal{H}_K \).
+Los **espacios vectoriales de funciones**, en lugar de tener puntos con \(n\) componentes, tienen funciones. Estos espacios con producto escalar son **espacios de Hilbert**.
 
 ---
 
-## Reducción de dimensionalidad: Análisis de Componentes Principales (PCA)
+### Núcleos y espacios RKHS
 
-PCA transforma los datos a un nuevo sistema de coordenadas donde:
+Los llamados **espacios de Hilbert con núcleo reproductor (RKHS)** son los adecuados para trabajar.  
+Están completamente definidos por funciones \(K(x, y)\), denominadas **núcleos de Mercer**, y el espacio asociado se denota por \(\mathcal{H}_K\).
 
-- Las nuevas variables (**componentes principales**) son combinaciones lineales de las originales.
-- Se ordenan según la **varianza explicada**.
+---
+
+## Reducción de la dimensionalidad mediante Análisis de Componentes Principales (PCA)
+
+Cada transformación se denomina **componente principal**, y los nuevos valores en columna \(Z = XQ\) que toman los datos mediante esta transformación se denominan **scores**.
+
+La cuestión esencial es saber cómo calcular los coeficientes \(\varphi_{ij}\).  
+Una elección adecuada es aquella que preserva la **máxima varianza** de las variables originales.
 
 ---
 
 ### Aplicaciones del PCA
 
-- **Reducción de la dimensionalidad**
-- **Eliminación de ruido**
-- **Visualización** de datos multidimensionales
-- **Compresión** de datos
+El algoritmo PCA puede utilizarse:
+
+- Por sí solo.
+- Como técnica de **limpieza o preprocesamiento de datos**, antes de aplicar otro algoritmo de aprendizaje automático.
+
+**Usos comunes:**
+
+1. Reducción de la dimensionalidad del problema.
+2. Eliminación de ruido de los datos.
+3. Visualización de datos multidimensionales.
+4. Compresión de información.
 
 ---
 
-### Pasos para calcular PCA
+### ¿Cómo se calcula el PCA?
 
-1. **Estandarización** de variables
-2. **Cálculo de la matriz de covarianzas**
-3. **Descomposición en valores propios**
-4. **Ordenación de los vectores propios**
-5. **Selección de componentes principales**
+Mediante **descomposición de valores propios** de la matriz de varianza-covarianza.
+
+**Pasos:**
+
+1. Estandarización de las variables.
+2. Cálculo de la matriz de varianza-covarianza.
+3. Calcular la **descomposición en valores propios** de dicha matriz.
+4. Ordenar los vectores propios.
+5. Seleccionar el número de componentes principales.
 
 ---
 
 ### Ventajas del PCA
 
-- Fácil de implementar
-- Mejora el rendimiento de otros algoritmos
-- Reduce riesgo de **sobreajuste**
-- Reduce la dimensionalidad eliminando ruido
+- Fácil de realizar.
+- Acelera algoritmos de aprendizaje automático.
+- Palía problemas de alta dimensionalidad.
+- Elimina ruido de los datos.
+- Reduce la dimensión del conjunto de entrenamiento → evita el sobreajuste.
 
-### Inconvenientes del PCA
+---
 
-- **Poca interpretabilidad** de los componentes
-- **Compromiso** entre pérdida de información y reducción de dimensionalidad
+### Desventajas del PCA
+
+- Baja interpretabilidad de los componentes principales.
+- Existe un equilibrio entre **la pérdida de información** y la reducción de la dimensionalidad.
