@@ -367,6 +367,8 @@ Una vez obtenidos \(\rho_i\) y \(\delta_i\), se construye un **gráfico de decis
 - **Paso 4 (Gráfico de decisión):** Dibujar el grafo de decisión y seleccionar manualmente los centros de los clusters.
 - **Paso 5 (Asignación):** Asignar los objetos restantes al mismo cluster que su vecino más cercano de mayor densidad.
 
+![densidad2](https://github.com/user-attachments/assets/3b0f08e5-f489-414e-926a-4a9a02a0c11e)
+
 ---
 
 ## 7.3. Algoritmos K-means basados en núcleos
@@ -376,8 +378,6 @@ Una vez obtenidos \(\rho_i\) y \(\delta_i\), se construye un **gráfico de decis
 El algoritmo K-means es adecuado para identificar grupos que están **separados linealmente**. En esta situación, existe un hiperplano (en el caso de datos bidimensionales, se trata de una recta) que los separa.
 
 Si los datos tienen una distribución como la mostrada en la parte derecha de la figura 7.6, el algoritmo K-means no sería capaz de identificar los dos grupos. Cuando se produce esta disposición geométrica, se dice que los datos **no pueden ser separados linealmente**, es decir, no se puede dibujar una recta que deje a un lado los cuadrados y al otro los círculos.
-
-![densidad2](https://github.com/user-attachments/assets/3b0f08e5-f489-414e-926a-4a9a02a0c11e)
 
 ---
 
